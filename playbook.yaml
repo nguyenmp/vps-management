@@ -1,0 +1,56 @@
+---
+- name: My first play
+  hosts: myhosts
+  tasks:
+    # Sanity test to connect to host
+    - name: Ping my hosts
+      ansible.builtin.ping: null
+    - name: Print message
+      ansible.builtin.debug:
+        msg: Hello world
+
+    # Set up system packages
+    - name: Install aptitude the preferred manager
+      ansible.builtin.apt:
+        name: aptitude
+        state: latest
+        update_cache: true  
+    - name: Upgrade system packages
+      ansible.builtin.apt:
+        upgrade: yes
+        update_cache: true
+
+    # Set up docker
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+
+    # Set up hikariita in docker
+    - name: Git checkout hikariita
+      ansible.builtin.git:
+        repo: 'https://github.com/nguyenmp/hikariita.git'
+        dest: ~/hikariita/
+    - name: Build hikariita docker image
+      community.docker.docker_image:
+        name: hikariita
+        build:
+          path: ~/hikariita/
+        source: build
+    - name: Create hikariita container
+      community.docker.docker_container:
+        name: hikariita
+        image: hikariita
+        ports:
+          - 8080:80
+        volumes:
+          - /mnt/volume_sfo3_01/hikariita/example.db:/usr/src/app/example.db
