@@ -9,6 +9,12 @@
       ansible.builtin.debug:
         msg: Hello world
 
+    # Drop the README.md on the host so that I know how to manage it in 10 years
+    - name: Add README.md
+      ansible.builtin.copy:
+        src: README.md
+        dest: ~/README.md
+
     # Set up system packages
     - name: Install aptitude the preferred manager
       ansible.builtin.apt:

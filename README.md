@@ -1,5 +1,7 @@
 # VPS Management
 
+https://github.com/nguyenmp/vps-management
+
 My old VPS is a mystery now.  It has an uptime of 7+ years and is running at 100% CPU because of a rogue script I kicked off into the background and I have no idea if it's necessary or what.  As such, I'm trying to get my VPS under version control and automation!
 
 I use ansible to do initial setup of the main machine and then docker to run my specific projects and apps (like hikariita).
