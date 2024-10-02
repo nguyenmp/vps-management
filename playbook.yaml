@@ -42,21 +42,10 @@
         update_cache: true
 
     # Set up hikariita in docker
-    - name: Git checkout hikariita
-      ansible.builtin.git:
-        repo: 'https://github.com/nguyenmp/hikariita.git'
-        dest: ~/hikariita/
-    - name: Build hikariita docker image
-      community.docker.docker_image:
-        name: hikariita
-        build:
-          path: ~/hikariita/
-        source: build
-    - name: Create hikariita container
-      community.docker.docker_container:
-        name: hikariita
-        image: hikariita
-        ports:
-          - 8080:80
-        volumes:
-          - /mnt/volume_sfo3_01/hikariita/example.db:/usr/src/app/example.db
+    - name: Add compose.yaml
+      ansible.builtin.copy:
+        src: compose.yaml
+        dest: ~/compose.yaml
+    - name: docker compose up
+      community.docker.docker_compose_v2:
+        project_src: .

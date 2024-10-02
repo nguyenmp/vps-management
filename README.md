@@ -34,6 +34,9 @@ Install `ansible` on your local dev machine:
 
 ```
 pip3 install ansible
+
+# force was necessary cause of https://github.com/geerlingguy/internet-pi/issues/577
+ansible-galaxy collection install community.docker --force
 ```
 
 Make sure new host is defined in `inventory.ini` and that we have SSH access (see https://github.com/nguyenmp/hikariita for details on SSH)
@@ -49,6 +52,25 @@ Run playbook to set up VPS:
 ```
 ansible-playbook -i inventory.ini playbook.yaml --key-file ~/.ssh/id_ed25519.digital_ocean -u root
 ```
+
+## Setup docker locally
+
+Install Docker Desktop: https://www.docker.com/products/docker-desktop/
+
+Do the initial SSH access above.
+
+Fetch a seeded DB:
+
+```bash
+scp -i ~/.ssh/id_ed25519.digital_ocean root@147.182.236.144:/mnt/volume_sfo3_01/hikariita/ ~/code/hikariita/example.db
+```
+
+Then run compose up:
+```bash
+HIKARIITA_DB_FILE=~/code/hikariita/example.db docker compose up`
+```
+
+Visit http://localhost:8080 for hikariita
 
 ## Logs
 

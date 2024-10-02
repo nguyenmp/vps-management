@@ -1,0 +1,10 @@
+
+---
+
+services:
+  hikariita:
+    build: https://github.com/nguyenmp/hikariita.git
+    ports:
+      - 8080:80
+    volumes:
+      - ${HIKARIITA_DB_FILE-/mnt/volume_sfo3_01/hikariita/example.db}:/usr/src/app/example.db
