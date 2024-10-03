@@ -36,7 +36,7 @@ Install `ansible` on your local dev machine:
 pip3 install ansible
 
 # force was necessary cause of https://github.com/geerlingguy/internet-pi/issues/577
-ansible-galaxy collection install community.docker --force
+ansible-galaxy collection install community.docker community.crypto --force
 ```
 
 Make sure new host is defined in `inventory.ini` and that we have SSH access (see https://github.com/nguyenmp/hikariita for details on SSH)

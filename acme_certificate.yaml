@@ -1,0 +1,62 @@
+
+---
+- name: Install or refresh SSL certificate
+  hosts: myhosts
+  tasks:
+    - name: Generate an OpenSSL private key for ACME Challenge with default values
+      community.crypto.openssl_privatekey:
+        path: /etc/ssl/private/href.cat.pem
+
+    - name: Generate an OpenSSL private key for the CSR with default values
+      community.crypto.openssl_privatekey:
+        path: /etc/ssl/private/hikariita.href.cat.csr.pem
+
+    - name: Creates directory for certificate signing request (CSR)
+      ansible.builtin.file:
+        path: /etc/ssl/csr/
+        state: directory
+
+    - name: Generate a certificate signing request (CSR)
+      community.crypto.openssl_csr:
+        path: /etc/ssl/csr/hikariita.href.cat.csr
+        privatekey_path: /etc/ssl/private/hikariita.href.cat.csr.pem
+        subject_alt_name: 'DNS:hikariita.href.cat'
+
+    - name: Creates directory
+      ansible.builtin.file:
+        path: /etc/httpd/ssl/
+        state: directory
+
+    - name: Create a challenge for hikariita.href.cat using a account key file.
+      community.crypto.acme_certificate:
+        acme_version: 2
+        acme_directory: https://acme-staging-v02.api.letsencrypt.org/directory
+        terms_agreed: true
+        account_key_src: /etc/ssl/private/href.cat.pem
+        csr: /etc/ssl/csr/hikariita.href.cat.csr
+        dest: /etc/httpd/ssl/hikariita.href.cat.crt
+        fullchain_dest: /etc/httpd/ssl/hikariita.href.cat-fullchain.crt
+      register: hikariita_href_cat_challenge
+
+    - name: Creates ~/vps-management/www/ directory
+      ansible.builtin.file:
+        path: ~/vps-management/www/.well-known/acme-challenge/
+        state: directory
+
+    - name: Copy challenge content
+      ansible.builtin.copy:
+        dest: ~/vps-management/www/{{ item.value['http-01']['resource'] }}
+        content: "{{ item.value['http-01']['resource_value'] }}"
+      loop: "{{ hikariita_href_cat_challenge.challenge_data | dict2items }}"
+      when: hikariita_href_cat_challenge is changed
+
+    - name: Let the challenge be validated and retrieve the cert and intermediate certificate
+      community.crypto.acme_certificate:
+        acme_version: 2
+        acme_directory: https://acme-staging-v02.api.letsencrypt.org/directory
+        account_key_src: /etc/ssl/private/href.cat.pem
+        csr: /etc/ssl/csr/hikariita.href.cat.csr
+        dest: /etc/httpd/ssl/hikariita.href.cat.crt
+        fullchain_dest: /etc/httpd/ssl/hikariita.href.cat-fullchain.crt
+        chain_dest: /etc/httpd/ssl/hikariita.href.cat-intermediate.crt
+        data: "{{ hikariita_href_cat_challenge }}"

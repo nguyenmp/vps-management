@@ -10,21 +10,23 @@
         msg: Hello world
 
     # Drop the README.md on the host so that I know how to manage it in 10 years
-    - name: Add README.md
-      ansible.builtin.copy:
-        src: README.md
-        dest: ~/README.md
+    - name: Add this repository (minus .git) and the rest of this project
+      ansible.posix.synchronize:
+        src: ./
+        dest: ~/vps-management/
+        archive: true
+        recursive: true
 
     # Set up system packages
     - name: Install aptitude the preferred manager
       ansible.builtin.apt:
         name: aptitude
         state: latest
-        update_cache: true  
-    - name: Upgrade system packages
-      ansible.builtin.apt:
-        upgrade: yes
         update_cache: true
+    # - name: Upgrade system packages
+    #   ansible.builtin.apt:
+    #     upgrade: yes
+    #     update_cache: true
 
     # Set up docker
     - name: Add Docker GPG apt Key
@@ -41,11 +43,6 @@
         state: latest
         update_cache: true
 
-    # Set up hikariita in docker
-    - name: Add compose.yaml
-      ansible.builtin.copy:
-        src: compose.yaml
-        dest: ~/compose.yaml
     - name: docker compose up
       community.docker.docker_compose_v2:
-        project_src: .
+        project_src: ./vps-management/
