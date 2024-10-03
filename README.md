@@ -67,10 +67,11 @@ scp -i ~/.ssh/id_ed25519.digital_ocean root@147.182.236.144:/mnt/volume_sfo3_01/
 
 Then run compose up:
 ```bash
-HIKARIITA_DB_FILE=~/code/hikariita/example.db docker compose up`
+docker compose down && HIKARIITA_DB_FILE=~/code/hikariita/example.db docker compose up`
 ```
 
-Visit http://localhost:8080 for hikariita
+Visit http://hikariita.docker.localhost/ for hikariita
+Visit http://localhost:8080/dashboard/#/ for traefik dashboard
 
 ## Logs
 

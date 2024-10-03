@@ -13,15 +13,13 @@ services:
       # The HTTP port
       - "80:80"
       # The Web UI (enabled by --api.insecure=true)
-      - "9090:8080"
+      - "8080:8080"
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
   hikariita:
     build: https://github.com/nguyenmp/hikariita.git
-    ports:
-      - 8080:80
     volumes:
       - ${HIKARIITA_DB_FILE-/mnt/volume_sfo3_01/hikariita/example.db}:/usr/src/app/example.db
     labels:
-      - "traefik.http.routers.hikariita.rule=Host(`hikariita.docker.localhost`)"
+      - "traefik.http.routers.hikariita.rule=Host(`hikariita.docker.localhost`) || Host(`hikariita.href.cat`)"
