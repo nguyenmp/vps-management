@@ -16,6 +16,9 @@
         dest: ~/vps-management/
         archive: true
         recursive: true
+        rsync_opts:
+          - "--exclude=.git"
+          - "--exclude=*-data/"
 
     # Set up system packages
     - name: Install aptitude the preferred manager
