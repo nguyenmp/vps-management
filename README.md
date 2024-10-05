@@ -66,6 +66,8 @@ docker compose run archivebox manage createsuperuser
 
 Add password to changes.href.cat (under Settings in web UI)
 
+Set poll interval to 1 minute (instead of 3 hours)
+
 Add base email notifications for changes.href.cat (Settings > Notifications) w/ email account configured on my mail server:
 mailtos://password@href.cat:587?user=changedetection@href.cat&smtp=banshee.mxlogin.com&to=personal_email@gmail.com
 
