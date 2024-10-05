@@ -58,6 +58,12 @@ Run playbook to set up VPS:
 ansible-playbook -i inventory.ini playbook.yaml --key-file ~/.ssh/id_ed25519.digital_ocean -u root
 ```
 
+Set up specific services if first run (via SSH on remote machine):
+
+```bash
+docker compose run archivebox manage createsuperuser
+```
+
 ## Setup docker locally
 
 Install Docker Desktop: https://www.docker.com/products/docker-desktop/
