@@ -39,6 +39,8 @@ services:
       - "traefik.http.routers.nginx.priority=1000"
   changedetection:
     image: ghcr.io/dgtlmoon/changedetection.io
+    environment:
+      - BASE_URL=changes.href.cat
     volumes:
       - changedetection-data:/datastore
     ports:

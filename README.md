@@ -64,6 +64,11 @@ Set up specific services if first run (via SSH on remote machine):
 docker compose run archivebox manage createsuperuser
 ```
 
+Add password to changes.href.cat (under Settings in web UI)
+
+Add base email notifications for changes.href.cat (Settings > Notifications) w/ email account configured on my mail server:
+mailtos://password@href.cat:587?user=changedetection@href.cat&smtp=banshee.mxlogin.com&to=personal_email@gmail.com
+
 ## Setup docker locally
 
 Install Docker Desktop: https://www.docker.com/products/docker-desktop/
