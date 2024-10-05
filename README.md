@@ -28,6 +28,11 @@ Anything weird I might need to know:
 * Smallest config @ $4/mo
 * 1 Volumes Block Storage (`/mnt/volume_sfo3_01/`) for hikariita
 
+Domains:
+* archivebox.href.cat
+* changes.href.cat
+* hikariita.href.cat
+
 ## How to Use
 
 Install `ansible` on your local dev machine:
@@ -71,6 +76,9 @@ docker compose down && HIKARIITA_DB_FILE=~/code/hikariita/example.db docker comp
 ```
 
 Visit http://hikariita.docker.localhost/ for hikariita
+Visit http://changes.docker.localhost/ for changedetector.io
+Visit http://archivebox.docker.localhost/ for archivebox
+
 Visit http://localhost:8080/dashboard/#/ for traefik dashboard
 
 ## Logs
