@@ -82,9 +82,9 @@ services:
       # - SAVE_MERCURY=False # Standalone archiver
       - SAVE_GIT=False
       # - SAVE_MEDIA=False # Stuff like *.mp4 videos and ytdownload
-      # only save metadata and transcript, no actual video, this helps with searching
-      - YOUTUBEDL_ARGS=["--write-description", "--skip-download", "--write-sub"]
-      - SAVE_ARCHIVE_DOT_ORG=False
+      # only save metadata and transcript, no actual video, this helps with searching (FYI it's yt-dlp not youtube-dl)
+      - YOUTUBEDL_ARGS=["--write-description", "--skip-download", "--write-subs"]
+      # - SAVE_ARCHIVE_DOT_ORG=False
 
       # - PUID=911                        # set to your host user's UID & GID if you encounter permissions issues
       # - PGID=911                        # UID/GIDs <500 may clash with existing users and are not recommended
