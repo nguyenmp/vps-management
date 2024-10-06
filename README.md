@@ -25,7 +25,8 @@ ssh -i ~/.ssh/id_ed25519.digital_ocean root@147.182.236.144
 Anything weird I might need to know:
 
 * Ubuntu 22
-* Smallest config @ $4/mo
+* 2 GB RAM minimum to run archivebox, otherwise pick the smallest one you can get.
+* 4 GB SWAP cause archivebox launches like 10 chrome instances at once (https://itsfoss.com/swap-size/) and 2x RAM seems reasonable at low RAM usages. `sudo fallocate -l 4G /swapfile && ` (https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-20-04)
 * 1 Volumes Block Storage (`/mnt/volume_sfo3_01/`) for hikariita
 
 Domains:

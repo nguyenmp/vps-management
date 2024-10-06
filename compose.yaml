@@ -66,6 +66,25 @@ services:
       - SEARCH_BACKEND_ENGINE=sonic       # tells ArchiveBox to use sonic container below for fast full-text search
       - SEARCH_BACKEND_HOST_NAME=sonic
       - SEARCH_BACKEND_PASSWORD=SomeSecretPassword
+
+      # Disable chrome because it's so CPU and RAM intensive
+      # https://docs.archivebox.io/en/latest/Install.html#supported-systems
+      # - USE_CHROME=False
+
+      # Disable a bunch of extractors that use up a lot of disk space
+      # https://docs.archivebox.io/en/latest/Configuration.html#archive-method-toggles
+      - SAVE_WGET=False # Big dump of assets
+      - SAVE_PDF=False # Chrome > PDF
+      - SAVE_SCREENSHOT=False # Chrome > Screenshot
+      # - SAVE_DOM=False # Chrome > HTML
+      - SAVE_SINGLEFILE=False # Chrome > SingleFile
+      # - SAVE_READABILITY=False # Mozilla Firefox's Readability Library
+      # - SAVE_MERCURY=False # Standalone archiver
+      - SAVE_GIT=False
+      # - SAVE_MEDIA=False # Stuff like *.mp4 videos and ytdownload -- only save metadata and transcript, no actual video, this helps with searching
+      - YOUTUBEDL_ARGS=["--write-description", "--skip-download", "--write-sub"]
+      - SAVE_ARCHIVE_DOT_ORG=False
+
       # - PUID=911                        # set to your host user's UID & GID if you encounter permissions issues
       # - PGID=911                        # UID/GIDs <500 may clash with existing users and are not recommended
       # - MEDIA_MAX_SIZE=750m             # increase this filesize limit to allow archiving larger audio/video files
