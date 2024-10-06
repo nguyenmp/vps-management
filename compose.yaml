@@ -69,19 +69,20 @@ services:
 
       # Disable chrome because it's so CPU and RAM intensive
       # https://docs.archivebox.io/en/latest/Install.html#supported-systems
-      # - USE_CHROME=False
+      - USE_CHROME=False # Same as SAVE_PDF=False, SAVE_SCREENSHOT=False, SAVE_DOM=False, SAVE_SINGLEFILE=False
 
       # Disable a bunch of extractors that use up a lot of disk space
       # https://docs.archivebox.io/en/latest/Configuration.html#archive-method-toggles
       - SAVE_WGET=False # Big dump of assets
       - SAVE_PDF=False # Chrome > PDF
       - SAVE_SCREENSHOT=False # Chrome > Screenshot
-      # - SAVE_DOM=False # Chrome > HTML
+      - SAVE_DOM=False # Chrome > HTML
       - SAVE_SINGLEFILE=False # Chrome > SingleFile
       # - SAVE_READABILITY=False # Mozilla Firefox's Readability Library
       # - SAVE_MERCURY=False # Standalone archiver
       - SAVE_GIT=False
-      # - SAVE_MEDIA=False # Stuff like *.mp4 videos and ytdownload -- only save metadata and transcript, no actual video, this helps with searching
+      # - SAVE_MEDIA=False # Stuff like *.mp4 videos and ytdownload
+      # only save metadata and transcript, no actual video, this helps with searching
       - YOUTUBEDL_ARGS=["--write-description", "--skip-download", "--write-sub"]
       - SAVE_ARCHIVE_DOT_ORG=False
 
