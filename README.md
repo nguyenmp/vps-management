@@ -63,6 +63,14 @@ Set up specific services if first run (via SSH on remote machine):
 
 ```bash
 docker compose run archivebox manage createsuperuser
+docker compose run archivebox config --set USE_CHROME=false
+docker compose run archivebox config --set SAVE_WGET=false
+docker compose run archivebox config --set SAVE_WARC=false
+docker compose run archivebox config --set SAVE_PDF=false
+docker compose run archivebox config --set SAVE_SCREENSHOT=false
+docker compose run archivebox config --set SAVE_DOM=false
+docker compose run archivebox config --set SAVE_SINGLEFILE=false
+docker compose run archivebox config --set SAVE_GIT=false
 ```
 
 Add password to changes.href.cat (under Settings in web UI)
