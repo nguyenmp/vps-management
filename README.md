@@ -71,6 +71,9 @@ docker compose run archivebox config --set SAVE_SCREENSHOT=false
 docker compose run archivebox config --set SAVE_DOM=false
 docker compose run archivebox config --set SAVE_SINGLEFILE=false
 docker compose run archivebox config --set SAVE_GIT=false
+
+# Trigger an OAUTH login flow for yt-dlp to save tokens in the cache
+docker compose exec -it --user archivebox archivebox yt-dlp --cache-dir=/data/yt-dlp-cache/ --write-description --skip-download --write-subs  --username=oauth2 --password= https://www.youtube.com/watch?v=GYIBYZuwQh4
 ```
 
 Add password to changes.href.cat (under Settings in web UI)
@@ -108,4 +111,19 @@ Visit http://localhost:8080/dashboard/#/ for traefik dashboard
 ```
 ssh -i ~/.ssh/id_ed25519.digital_ocean root@147.182.236.144
 docker container logs hikariita
+```
+
+## To rebuild a specific container image (like if you're updating local ArchiveBox)
+
+```
+cd ArchiveBox
+docker build .
+```
+
+If it builds, then commit and push.
+
+https://stackoverflow.com/questions/36884991/how-to-rebuild-docker-container-in-docker-compose-yml
+
+```
+docker-compose up -d --no-deps --build <service_name>
 ```

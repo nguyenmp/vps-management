@@ -83,7 +83,11 @@ services:
     #   - 172.20.0.53
     labels:
       - "traefik.http.routers.archivebox.rule=Host(`archivebox.docker.localhost`) || Host(`archivebox.href.cat`)"
-
+  tor-socks-proxy:
+    image: peterdavehello/tor-socks-proxy
+    expose:
+      - 9150
+    platform: linux/amd64
   sonic:
     image: valeriansaliou/sonic:latest
     build:
