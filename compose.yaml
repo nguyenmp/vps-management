@@ -42,7 +42,7 @@ services:
     environment:
       - BASE_URL=changes.href.cat
     volumes:
-      - changedetection-data:/datastore
+      - ./changedetection-data/:/datastore/
     ports:
       - 9000:5000
     restart: unless-stopped
@@ -53,7 +53,7 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - ./archivebox-data:/data
+      - ./archivebox-data/:/data/
       # ./data/personas/Default/chrome_profile/Default:/data/personas/Default/chrome_profile/Default
     environment:
       # - ADMIN_USERNAME=admin            # create an admin user on first run with the given user/pass combo
