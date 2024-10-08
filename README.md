@@ -73,7 +73,7 @@ docker compose run archivebox config --set SAVE_SINGLEFILE=false
 docker compose run archivebox config --set SAVE_GIT=false
 
 # Trigger an OAUTH login flow for yt-dlp to save tokens in the cache
-docker compose exec -it --user archivebox archivebox yt-dlp --cache-dir=/data/yt-dlp-cache/ --write-description --skip-download --write-subs  --username=oauth2 --password= https://www.youtube.com/watch?v=GYIBYZuwQh4
+docker compose exec -it --user archivebox archivebox yt-dlp --cache-dir=/data/yt-dlp-cache/ --write-description --skip-download --write-subs  --username=oauth2 --password= --proxy=socks5://tor-socks-proxy:9150 https://www.youtube.com/watch?v=GYIBYZuwQh4
 ```
 
 Add password to changes.href.cat (under Settings in web UI)
