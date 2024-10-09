@@ -90,21 +90,15 @@ services:
     platform: linux/amd64
   sonic:
     image: valeriansaliou/sonic:latest
-    build:
-      # custom build just auto-downloads archivebox's default sonic.cfg as a convenience
-      # not needed after first run / if you have already have ./etc/sonic.cfg present
-      dockerfile_inline: |
-        FROM quay.io/curl/curl:latest AS config_downloader
-        RUN curl -fsSL 'https://raw.githubusercontent.com/ArchiveBox/ArchiveBox/stable/etc/sonic.cfg' > /tmp/sonic.cfg
-        FROM valeriansaliou/sonic:latest
-        COPY --from=config_downloader /tmp/sonic.cfg /etc/sonic.cfg
+    build: .
     expose:
       - 1491
     environment:
       - SEARCH_BACKEND_PASSWORD=SomeSecretPassword
     volumes:
-      #- ./sonic.cfg:/etc/sonic.cfg:ro    # use this if you prefer to download the config on the host and mount it manually
+      - ./sonic.cfg:/etc/sonic.cfg:ro    # use this if you prefer to download the config on the host and mount it manually
       - ./sonic-data/sonic:/var/lib/sonic/store
+    platform: linux/amd64
 
 volumes:
   changedetection-data:
