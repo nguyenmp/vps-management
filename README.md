@@ -125,5 +125,5 @@ If it builds, then commit and push.
 https://stackoverflow.com/questions/36884991/how-to-rebuild-docker-container-in-docker-compose-yml
 
 ```
-docker-compose up -d --no-deps --build <service_name>
+docker compose up -d --no-deps --build <service_name>
 ```
