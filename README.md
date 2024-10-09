@@ -68,9 +68,10 @@ docker compose run archivebox config --set SAVE_WGET=false
 docker compose run archivebox config --set SAVE_WARC=false
 docker compose run archivebox config --set SAVE_PDF=false
 docker compose run archivebox config --set SAVE_SCREENSHOT=false
-docker compose run archivebox config --set SAVE_DOM=false
 docker compose run archivebox config --set SAVE_SINGLEFILE=false
 docker compose run archivebox config --set SAVE_GIT=false
+# Keep DOM enabled, even though it uses chrome.  One chrome at a time seems fine, not great but it gets past some paywalls.  Also the size is pretty minimal compared to WARC or singlefile which saves all the assets (images) too.
+# docker compose run archivebox config --set SAVE_DOM=false
 
 # Trigger an OAUTH login flow for yt-dlp to save tokens in the cache
 docker compose exec -it --user archivebox archivebox yt-dlp --cache-dir=/data/yt-dlp-cache/ --write-description --skip-download --write-subs  --username=oauth2 --password= --proxy=socks5://tor-socks-proxy:9150 --write-info-json https://www.youtube.com/watch?v=GYIBYZuwQh4
