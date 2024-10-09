@@ -73,7 +73,7 @@ docker compose run archivebox config --set SAVE_SINGLEFILE=false
 docker compose run archivebox config --set SAVE_GIT=false
 
 # Trigger an OAUTH login flow for yt-dlp to save tokens in the cache
-docker compose exec -it --user archivebox archivebox yt-dlp --cache-dir=/data/yt-dlp-cache/ --write-description --skip-download --write-subs  --username=oauth2 --password= --proxy=socks5://tor-socks-proxy:9150 https://www.youtube.com/watch?v=GYIBYZuwQh4
+docker compose exec -it --user archivebox archivebox yt-dlp --cache-dir=/data/yt-dlp-cache/ --write-description --skip-download --write-subs  --username=oauth2 --password= --proxy=socks5://tor-socks-proxy:9150 --write-info-json https://www.youtube.com/watch?v=GYIBYZuwQh4
 ```
 
 Add password to changes.href.cat (under Settings in web UI)
@@ -97,7 +97,7 @@ scp -i ~/.ssh/id_ed25519.digital_ocean root@147.182.236.144:/mnt/volume_sfo3_01/
 
 Then run compose up:
 ```bash
-docker compose down && HIKARIITA_DB_FILE=~/code/hikariita/example.db docker compose up`
+docker compose down && HIKARIITA_DB_FILE=~/code/hikariita/example.db docker compose up -d`
 ```
 
 Visit http://hikariita.docker.localhost/ for hikariita
@@ -105,6 +105,8 @@ Visit http://changes.docker.localhost/ for changedetector.io
 Visit http://archivebox.docker.localhost/ for archivebox
 
 Visit http://localhost:8080/dashboard/#/ for traefik dashboard
+
+Finish with the configuration from "How To Use".
 
 ## Logs
 
