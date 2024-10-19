@@ -99,6 +99,17 @@ services:
       - ./sonic.cfg:/etc/sonic.cfg:ro    # use this if you prefer to download the config on the host and mount it manually
       - ./sonic-data/sonic:/var/lib/sonic/store
     platform: linux/amd64
+  cron:
+    image: soulteary/cronicle
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./cron-data/logs/:/opt/cronicle/logs
+      - ./cron-data/plugins/:/opt/cronicle/plugins
+    expose:
+      - 3012
+    labels:
+      - "traefik.http.routers.cron.rule=Host(`cron.docker.localhost`) || Host(`cron.href.cat`)"
+    platform: linux/amd64
 
 volumes:
   changedetection-data:
