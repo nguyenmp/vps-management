@@ -7,8 +7,17 @@ services:
     image: traefik:v3.1
     # Enables the web UI and tells Traefik to listen to docker
     command:
+      - "--api=true"
       - "--api.insecure=true"
       - "--providers.docker"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=nguyenmp605@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     ports:
       # The HTTP port
       - "80:80"
@@ -19,12 +28,16 @@ services:
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./letsencrypt-data/:/letsencrypt/
   hikariita:
     build: https://github.com/nguyenmp/hikariita.git
     volumes:
       - ${HIKARIITA_DB_FILE-/mnt/volume_sfo3_01/hikariita/example.db}:/usr/src/app/example.db
     labels:
       - "traefik.http.routers.hikariita.rule=Host(`hikariita.docker.localhost`) || Host(`hikariita.href.cat`)"
+      - traefik.http.routers.hikariita.tls=true
+      - traefik.http.routers.hikariita.tls.certresolver=myresolver
+      - traefik.http.routers.hikariita.tls.domains[0].main=hikariita.href.cat
   nginx:
     image: nginx
     volumes:
@@ -48,6 +61,10 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.http.routers.changes.rule=Host(`changes.docker.localhost`) || Host(`changes.href.cat`)"
+      - traefik.http.routers.changes.tls=true
+      - traefik.http.routers.changes.tls.certresolver=myresolver
+      - traefik.http.routers.changes.tls.domains[0].main=changes.href.cat
+
   archivebox:
     build: https://github.com/nguyenmp/ArchiveBox.git#dev
     ports:
@@ -83,6 +100,9 @@ services:
     #   - 172.20.0.53
     labels:
       - "traefik.http.routers.archivebox.rule=Host(`archivebox.docker.localhost`) || Host(`archivebox.href.cat`)"
+      - traefik.http.routers.archivebox.tls=true
+      - traefik.http.routers.archivebox.tls.certresolver=myresolver
+      - traefik.http.routers.archivebox.tls.domains[0].main=archivebox.href.cat
   tor-socks-proxy:
     image: peterdavehello/tor-socks-proxy
     expose:
@@ -109,6 +129,9 @@ services:
       - 3012
     labels:
       - "traefik.http.routers.cron.rule=Host(`cron.docker.localhost`) || Host(`cron.href.cat`)"
+      - traefik.http.routers.cron.tls=true
+      - traefik.http.routers.cron.tls.certresolver=myresolver
+      - traefik.http.routers.cron.tls.domains[0].main=cron.href.cat
     platform: linux/amd64
 
 volumes:
