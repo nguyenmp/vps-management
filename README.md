@@ -143,3 +143,17 @@ docker compose down changedetection
 docker pull ghcr.io/dgtlmoon/changedetection.io
 docker compose up -d
 ```
+
+## Cronicle fork
+
+I had to fork docker-cronicle because I was encountering a race condiiton:
+https://github.com/soulteary/docker-cronicle/pull/27
+
+The fork works by cloning https://github.com/nguyenmp/docker-cronicle and:
+
+```
+docker build --platform linux/amd64 .
+docker image list
+docker image tag <Image_ID> markerz/cronicle:latest
+docker image push markerz/cronicle:latest
+```

@@ -120,9 +120,10 @@ services:
       - ./sonic-data/sonic:/var/lib/sonic/store
     platform: linux/amd64
   cron:
-    image: soulteary/cronicle
+    image: markerz/cronicle
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ./cron-data/data/:/opt/cronicle/data
       - ./cron-data/logs/:/opt/cronicle/logs
       - ./cron-data/plugins/:/opt/cronicle/plugins
     expose:
