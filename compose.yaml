@@ -107,6 +107,13 @@ services:
       - traefik.http.routers.archivebox.tls=true
       - traefik.http.routers.archivebox.tls.certresolver=myresolver
       - traefik.http.routers.archivebox.tls.domains[0].main=archivebox.href.cat
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:8000/"]
+      interval: 5s
+      timeout: 2s
+      start_period: 30s
+      start_interval: 5s
+      retries: 12
   tor-socks-proxy:
     image: peterdavehello/tor-socks-proxy
     expose:

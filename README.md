@@ -101,7 +101,7 @@ scp -i ~/.ssh/id_ed25519.digital_ocean root@147.182.236.144:/mnt/volume_sfo3_01/
 
 Then run compose up:
 ```bash
-docker compose down && HIKARIITA_DB_FILE=~/code/hikariita/example.db docker compose up -d`
+docker compose down && HIKARIITA_DB_FILE=~/code/hikariita/example.db docker compose up -d --wait`
 ```
 
 Visit http://hikariita.docker.localhost/ for hikariita
@@ -131,7 +131,7 @@ If it builds, then commit and push.
 https://stackoverflow.com/questions/36884991/how-to-rebuild-docker-container-in-docker-compose-yml
 
 ```
-docker compose up -d --no-deps --build <service_name>
+docker compose up -d --wait --no-deps --build <service_name>
 ```
 
 ## Updating the server
@@ -141,7 +141,7 @@ ssh in, then:
 ```
 docker compose down changedetection
 docker pull ghcr.io/dgtlmoon/changedetection.io
-docker compose up -d
+docker compose up -d --wait
 ```
 
 ## Cronicle fork
