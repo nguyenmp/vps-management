@@ -177,7 +177,7 @@ docker image ls
 
 # Try updating!
 docker compose pull
-docker compose down
+docker compose down  # Optional downtime to force restart all containers
 docker compose up -d --remove-orphans --wait --build hikariita archivebox # Needs to be rebuilt from source cause git doesn't automatically update
 docker compose up -d --wait
 
