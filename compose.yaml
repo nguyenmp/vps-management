@@ -30,6 +30,13 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./letsencrypt-data/:/letsencrypt/
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "http://localhost:8080", "-O", "-"]
+      interval: 5s
+      timeout: 2s
+      start_period: 30s
+      start_interval: 1s
+      retries: 12
   hikariita:
     build: https://github.com/nguyenmp/hikariita.git
     volumes:
@@ -40,38 +47,53 @@ services:
       - traefik.http.routers.hikariita.tls=true
       - traefik.http.routers.hikariita.tls.certresolver=myresolver
       - traefik.http.routers.hikariita.tls.domains[0].main=hikariita.href.cat
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:80/"]
+      interval: 5s
+      timeout: 2s
+      start_period: 30s
+      start_interval: 5s
+      retries: 12
   nginx:
     image: nginx
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ./www/:/etc/nginx/www/:ro
-    ports:
-      - "7070:80"
     environment:
       - NGINX_PORT=80
     restart: unless-stopped
     labels:
       - "traefik.http.routers.nginx.rule=PathPrefix(`/.well-known/acme-challenge/`)"
       - "traefik.http.routers.nginx.priority=1000"
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:80/"]
+      interval: 5s
+      timeout: 2s
+      start_period: 30s
+      start_interval: 5s
+      retries: 12
   changedetection:
     image: ghcr.io/dgtlmoon/changedetection.io
     environment:
       - BASE_URL=changes.href.cat
     volumes:
       - ./changedetection-data/:/datastore/
-    ports:
-      - 9000:5000
     restart: unless-stopped
     labels:
       - "traefik.http.routers.changes.rule=Host(`changes.docker.localhost`) || Host(`changes.href.cat`)"
       - traefik.http.routers.changes.tls=true
       - traefik.http.routers.changes.tls.certresolver=myresolver
       - traefik.http.routers.changes.tls.domains[0].main=changes.href.cat
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import requests; requests.get('http://localhost:5000').raise_for_status()\""]
+      interval: 5s
+      timeout: 2s
+      start_period: 30s
+      start_interval: 1s
+      retries: 12
 
   archivebox:
     build: https://github.com/nguyenmp/ArchiveBox.git#dev
-    ports:
-      - 8000:8000
     volumes:
       - ./archivebox-data/:/data/
       # ./data/personas/Default/chrome_profile/Default:/data/personas/Default/chrome_profile/Default
@@ -120,6 +142,13 @@ services:
       - 9150
     restart: unless-stopped
     platform: linux/amd64
+    healthcheck:
+      test: ["CMD", "curl", "icanhazip.com", "-x", "socks5://localhost:9150"]
+      interval: 5s
+      timeout: 2s
+      start_period: 30s
+      start_interval: 5s
+      retries: 12
   sonic:
     image: valeriansaliou/sonic:latest
     build: .
@@ -148,6 +177,13 @@ services:
       - traefik.http.routers.cron.tls.certresolver=myresolver
       - traefik.http.routers.cron.tls.domains[0].main=cron.href.cat
     platform: linux/amd64
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:3012/"]
+      interval: 5s
+      timeout: 2s
+      start_period: 30s
+      start_interval: 5s
+      retries: 12
 
 volumes:
   changedetection-data:
