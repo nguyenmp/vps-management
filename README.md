@@ -136,24 +136,34 @@ docker compose up -d --wait --no-deps --build <service_name>
 
 ## Updating the server
 
+Sync https://github.com/nguyenmp/ArchiveBox#dev with upstream (might take a while get back on mainline, it's pretty hacked):
+```
+git clone https://github.com/nguyenmp/ArchiveBox.git
+git remote add upstream https://github.com/ArchiveBox/ArchiveBox.git
+git fetch upstream
+git merge upstream/dev
+git push
+```
+
+Sync https://github.com/nguyenmp/docker-cronicle/ (see if we're behind first) with upstream (should be removed after the https://github.com/soulteary/docker-cronicle/pull/27 race condition fix is merged or addressed):
+```
+git clone https://github.com/nguyenmp/docker-cronicle.git
+git remote add upstream https://github.com/soulteary/docker-cronicle.git
+git fetch upstream
+git merge upstream/dev
+git push
+
+docker build --platform linux/amd64 .
+docker image list
+docker image tag <Image_ID> markerz/cronicle:latest
+docker image push markerz/cronicle:latest
+
+```
+
 ssh in, then:
 
 ```
 docker compose down
 docker compose pull
 docker compose up -d --wait
-```
-
-## Cronicle fork
-
-I had to fork docker-cronicle because I was encountering a race condiiton:
-https://github.com/soulteary/docker-cronicle/pull/27
-
-The fork works by cloning https://github.com/nguyenmp/docker-cronicle and:
-
-```
-docker build --platform linux/amd64 .
-docker image list
-docker image tag <Image_ID> markerz/cronicle:latest
-docker image push markerz/cronicle:latest
 ```
