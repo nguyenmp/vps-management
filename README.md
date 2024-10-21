@@ -139,8 +139,8 @@ docker compose up -d --wait --no-deps --build <service_name>
 ssh in, then:
 
 ```
-docker compose down changedetection
-docker pull ghcr.io/dgtlmoon/changedetection.io
+docker compose down
+docker compose pull
 docker compose up -d --wait
 ```
 
