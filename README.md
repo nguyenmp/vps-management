@@ -136,6 +136,8 @@ docker compose up -d --wait --no-deps --build <service_name>
 
 ## Updating the server
 
+Consider updating traefik while you're at it, it's a hardcoded version whereas everything else is "latest".
+
 Sync https://github.com/nguyenmp/ArchiveBox#dev with upstream (might take a while get back on mainline, it's pretty hacked):
 ```
 git clone https://github.com/nguyenmp/ArchiveBox.git
@@ -157,12 +159,17 @@ docker build --platform linux/amd64 .
 docker image list
 docker image tag <Image_ID> markerz/cronicle:latest
 docker image push markerz/cronicle:latest
-
 ```
 
 ssh in, then:
 
 ```
+
+# Save these outputs in case things go wrong
+docker container list
+docker image ls
+
+# Try updating!
 docker compose down
 docker compose pull
 docker compose up -d --wait
