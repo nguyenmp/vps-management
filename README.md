@@ -153,8 +153,14 @@ git clone https://github.com/nguyenmp/docker-cronicle.git
 git remote add upstream https://github.com/soulteary/docker-cronicle.git
 git fetch upstream
 git merge upstream/dev
+
+# Update version reference to latest 0.9.59 -> 0.9.61 https://github.com/jhuckaby/Cronicle/releases
+sed -i '.bak' 's/0.9.59/0.9.61/g' # but do it in vscode instead
+
+git commit
 git push
 
+cd docker
 docker build --platform linux/amd64 .
 docker image list
 docker image tag <Image_ID> markerz/cronicle:latest
@@ -170,7 +176,11 @@ docker container list
 docker image ls
 
 # Try updating!
-docker compose down
 docker compose pull
+docker compose down
+docker compose up -d --remove-orphans --wait --build hikariita archivebox # Needs to be rebuilt from source cause git doesn't automatically update
 docker compose up -d --wait
+
+# Clean up?
+docker system prune
 ```
