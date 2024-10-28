@@ -184,3 +184,15 @@ docker compose --env-file ./envs/local.env up -d --wait
 # Clean up?
 docker system prune
 ```
+
+## Manually backup postgres
+
+```
+docker compose --env-file ./envs/local.env exec -it pgbackups3 /bin/sh backup.sh
+```
+
+And how to restore from backup:
+
+```
+pg_restore -h localhost -p 5432 -U postgres -d postgres postgres_2024-10-28T19_26_17.dump
+```

@@ -185,7 +185,7 @@ services:
       start_interval: 5s
       retries: 12
   postgres-recipes:
-    image: pgvector/pgvector:pg17
+    image: pgvector/pgvector:pg${POSTGRES_VERSION:?error}
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?error}
     ports:
@@ -198,6 +198,28 @@ services:
       interval: 1s
       timeout: 5s
       retries: 10
+  pgbackups3:
+    build:
+      context: https://github.com/miharekar/postgres-backup-s3.git
+      args:
+        POSTGRES_VERSION: ${POSTGRES_VERSION:?error}
+    links:
+      - postgres-recipes
+    depends_on:
+      postgres-recipes:
+        condition: service_healthy
+    environment:
+      SCHEDULE: '@daily'
+      # S3_REGION: region
+      S3_ACCESS_KEY_ID: ${POSTGRES_BACKUP_S3_ACCESS_KEY_ID:?error}
+      S3_SECRET_ACCESS_KEY: ${POSTGRES_BACKUP_S3_SECRET_ACCESS_KEY:?error}
+      S3_BUCKET: recipes.backup.production
+      S3_PREFIX: backup_${STAGE:?error}
+      POSTGRES_DATABASE: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?error}
+      POSTGRES_EXTRA_OPTS: '--schema=public --blobs'
+      POSTGRES_HOST: postgres-recipes
 
 volumes:
   changedetection-data:
