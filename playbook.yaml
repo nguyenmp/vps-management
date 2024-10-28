@@ -48,4 +48,9 @@
 
     - name: docker compose up
       community.docker.docker_compose_v2:
+        env_files:
+          - ./envs/production.env
         project_src: ./vps-management/
+        pull: always
+        remove_orphans: true
+        wait: true

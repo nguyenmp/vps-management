@@ -62,22 +62,22 @@ ansible-playbook -i inventory.ini playbook.yaml --key-file ~/.ssh/id_ed25519.dig
 Set up specific services if first run (via SSH on remote machine):
 
 ```bash
-docker compose run archivebox manage createsuperuser
-docker compose run archivebox config --set USE_CHROME=false
-docker compose run archivebox config --set SAVE_WGET=false
-docker compose run archivebox config --set SAVE_WARC=false
-docker compose run archivebox config --set SAVE_PDF=false
-docker compose run archivebox config --set SAVE_SCREENSHOT=false
-docker compose run archivebox config --set SAVE_SINGLEFILE=false
-docker compose run archivebox config --set SAVE_GIT=false
+docker compose --env-file ./envs/local.env run archivebox manage createsuperuser
+docker compose --env-file ./envs/local.env run archivebox config --set USE_CHROME=false
+docker compose --env-file ./envs/local.env run archivebox config --set SAVE_WGET=false
+docker compose --env-file ./envs/local.env run archivebox config --set SAVE_WARC=false
+docker compose --env-file ./envs/local.env run archivebox config --set SAVE_PDF=false
+docker compose --env-file ./envs/local.env run archivebox config --set SAVE_SCREENSHOT=false
+docker compose --env-file ./envs/local.env run archivebox config --set SAVE_SINGLEFILE=false
+docker compose --env-file ./envs/local.env run archivebox config --set SAVE_GIT=false
 # Keep DOM enabled, even though it uses chrome.  One chrome at a time seems fine, not great but it gets past some paywalls.  Also the size is pretty minimal compared to WARC or singlefile which saves all the assets (images) too.
-# docker compose run archivebox config --set SAVE_DOM=false
+# docker compose --env-file ./envs/local.env run archivebox config --set SAVE_DOM=false
 
 # Trigger an OAUTH login flow for yt-dlp to save tokens in the cache
-docker compose exec -it --user archivebox archivebox yt-dlp --cache-dir=/data/yt-dlp-cache/ --write-description --skip-download --write-subs  --username=oauth2 --password= --proxy=socks5://tor-socks-proxy:9150 --write-info-json https://www.youtube.com/watch?v=GYIBYZuwQh4
+docker compose --env-file ./envs/local.env exec -it --user archivebox archivebox yt-dlp --cache-dir=/data/yt-dlp-cache/ --write-description --skip-download --write-subs  --username=oauth2 --password= --proxy=socks5://tor-socks-proxy:9150 --write-info-json https://www.youtube.com/watch?v=GYIBYZuwQh4
 
 # Pick up the new config changes and verify via the admin panel
-docker compose restart archivebox
+docker compose --env-file ./envs/local.env restart archivebox
 ```
 
 Add password to changes.href.cat (under Settings in web UI)
@@ -101,7 +101,7 @@ scp -i ~/.ssh/id_ed25519.digital_ocean root@147.182.236.144:/mnt/volume_sfo3_01/
 
 Then run compose up:
 ```bash
-docker compose down && HIKARIITA_DB_FILE=~/code/hikariita/example.db docker compose up -d --wait
+docker compose --env-file ./envs/local.env down && docker compose --env-file ./envs/local.env up -d --wait
 ```
 
 Visit http://hikariita.docker.localhost/ for hikariita
@@ -131,7 +131,7 @@ If it builds, then commit and push.
 https://stackoverflow.com/questions/36884991/how-to-rebuild-docker-container-in-docker-compose-yml
 
 ```
-docker compose up -d --wait --no-deps --build <service_name>
+docker compose up -d --wait --no-deps --env-file ./envs/local.env --build <service_name>
 ```
 
 ## Updating the server
@@ -176,10 +176,10 @@ docker container list
 docker image ls
 
 # Try updating!
-docker compose pull
-docker compose down  # Optional downtime to force restart all containers
-docker compose up -d --remove-orphans --wait --build hikariita archivebox # Needs to be rebuilt from source cause git doesn't automatically update
-docker compose up -d --wait
+docker compose --env-file ./envs/local.env pull
+docker compose --env-file ./envs/local.env down  # Optional downtime to force restart all containers
+docker compose --env-file ./envs/local.env up -d --remove-orphans --wait --build hikariita archivebox # Needs to be rebuilt from source cause git doesn't automatically update
+docker compose --env-file ./envs/local.env up -d --wait
 
 # Clean up?
 docker system prune

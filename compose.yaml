@@ -40,7 +40,7 @@ services:
   hikariita:
     build: https://github.com/nguyenmp/hikariita.git
     volumes:
-      - ${HIKARIITA_DB_FILE-/mnt/volume_sfo3_01/hikariita/example.db}:/usr/src/app/example.db
+      - ${HIKARIITA_DB_FILE:?error}:/usr/src/app/example.db
     restart: unless-stopped
     labels:
       - "traefik.http.routers.hikariita.rule=Host(`hikariita.docker.localhost`) || Host(`hikariita.href.cat`)"
@@ -107,7 +107,7 @@ services:
       - PUBLIC_ADD_VIEW=False             # set to True to allow anonymous users to submit new URLs to archive
       - SEARCH_BACKEND_ENGINE=sonic       # tells ArchiveBox to use sonic container below for fast full-text search
       - SEARCH_BACKEND_HOST_NAME=sonic
-      - SEARCH_BACKEND_PASSWORD=SomeSecretPassword
+      - SEARCH_BACKEND_PASSWORD=${SEARCH_BACKEND_PASSWORD:?error}
       # - PUID=911                        # set to your host user's UID & GID if you encounter permissions issues
       # - PGID=911                        # UID/GIDs <500 may clash with existing users and are not recommended
       # - MEDIA_MAX_SIZE=750m             # increase this filesize limit to allow archiving larger audio/video files
@@ -155,7 +155,7 @@ services:
     expose:
       - 1491
     environment:
-      - SEARCH_BACKEND_PASSWORD=SomeSecretPassword
+      - SEARCH_BACKEND_PASSWORD=${SEARCH_BACKEND_PASSWORD:?error}
     volumes:
       - ./sonic.cfg:/etc/sonic.cfg:ro    # use this if you prefer to download the config on the host and mount it manually
       - ./sonic-data/sonic:/var/lib/sonic/store
@@ -184,6 +184,20 @@ services:
       start_period: 30s
       start_interval: 5s
       retries: 12
+  postgres-recipes:
+    image: pgvector/pgvector:pg17
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?error}
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres-recipes-data/:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
 
 volumes:
   changedetection-data:
