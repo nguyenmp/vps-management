@@ -208,6 +208,7 @@ services:
     depends_on:
       postgres-recipes:
         condition: service_healthy
+    restart: unless-stopped
     environment:
       SCHEDULE: '@daily'
       # S3_REGION: region
