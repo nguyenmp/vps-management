@@ -178,7 +178,7 @@ docker image ls
 # Try updating!
 docker compose --env-file ./envs/local.env pull
 docker compose --env-file ./envs/local.env down  # Optional downtime to force restart all containers
-docker compose --env-file ./envs/local.env up -d --remove-orphans --wait --build hikariita archivebox # Needs to be rebuilt from source cause git doesn't automatically update
+docker compose --env-file ./envs/local.env up -d --remove-orphans --wait --build hikariita archivebox recipes # Needs to be rebuilt from source cause git doesn't automatically update
 docker compose --env-file ./envs/local.env up -d --wait
 
 # Clean up?
