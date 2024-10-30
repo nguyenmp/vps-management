@@ -221,6 +221,25 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?error}
       POSTGRES_EXTRA_OPTS: '--schema=public --blobs'
       POSTGRES_HOST: postgres-recipes
+  recipes:
+    build: https://github.com/nguyenmp/recipes-app.git
+    env_file: ${RECIPES_ENV_FILE:?error}
+    restart: unless-stopped
+    labels:
+      - "traefik.http.routers.recipes.rule=Host(`recipes.docker.localhost`) || Host(`recipes.href.cat`)"
+      - traefik.http.routers.recipes.tls=true
+      - traefik.http.routers.recipes.tls.certresolver=myresolver
+      - traefik.http.routers.recipes.tls.domains[0].main=recipes.href.cat
+    depends_on:
+      postgres-recipes:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:3000/recipes?query=kale"]
+      interval: 5s
+      timeout: 2s
+      start_period: 30s
+      start_interval: 5s
+      retries: 12
 
 volumes:
   changedetection-data:
