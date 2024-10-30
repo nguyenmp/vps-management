@@ -32,11 +32,11 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "http://localhost:8080", "-O", "-"]
-      interval: 5s
-      timeout: 2s
+      interval: 60s
+      timeout: 5s
       start_period: 30s
-      start_interval: 1s
-      retries: 12
+      start_interval: 5s
+      retries: 5
   hikariita:
     build: https://github.com/nguyenmp/hikariita.git
     volumes:
@@ -49,11 +49,11 @@ services:
       - traefik.http.routers.hikariita.tls.domains[0].main=hikariita.href.cat
     healthcheck:
       test: ["CMD", "curl", "http://localhost:80/"]
-      interval: 5s
-      timeout: 2s
+      interval: 61s
+      timeout: 5s
       start_period: 30s
       start_interval: 5s
-      retries: 12
+      retries: 5
   nginx:
     image: nginx
     volumes:
@@ -67,11 +67,11 @@ services:
       - "traefik.http.routers.nginx.priority=1000"
     healthcheck:
       test: ["CMD", "curl", "http://localhost:80/"]
-      interval: 5s
-      timeout: 2s
+      interval: 62s
+      timeout: 5s
       start_period: 30s
       start_interval: 5s
-      retries: 12
+      retries: 5
   changedetection:
     image: ghcr.io/dgtlmoon/changedetection.io
     environment:
@@ -86,11 +86,11 @@ services:
       - traefik.http.routers.changes.tls.domains[0].main=changes.href.cat
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import requests; requests.get('http://localhost:5000').raise_for_status()\""]
-      interval: 5s
-      timeout: 2s
+      interval: 63s
+      timeout: 5s
       start_period: 30s
-      start_interval: 1s
-      retries: 12
+      start_interval: 5s
+      retries: 5
 
   archivebox:
     build: https://github.com/nguyenmp/ArchiveBox.git#dev
@@ -131,11 +131,11 @@ services:
       - traefik.http.routers.archivebox.tls.domains[0].main=archivebox.href.cat
     healthcheck:
       test: ["CMD", "curl", "http://localhost:8000/"]
-      interval: 5s
-      timeout: 2s
+      interval: 64s
+      timeout: 5s
       start_period: 30s
       start_interval: 5s
-      retries: 12
+      retries: 5
   tor-socks-proxy:
     image: peterdavehello/tor-socks-proxy
     expose:
@@ -144,11 +144,11 @@ services:
     platform: linux/amd64
     healthcheck:
       test: ["CMD", "curl", "icanhazip.com", "-x", "socks5://localhost:9150"]
-      interval: 5s
-      timeout: 2s
+      interval: 65s
+      timeout: 5s
       start_period: 30s
       start_interval: 5s
-      retries: 12
+      retries: 5
   sonic:
     image: valeriansaliou/sonic:latest
     build: .
@@ -179,11 +179,11 @@ services:
     platform: linux/amd64
     healthcheck:
       test: ["CMD", "curl", "http://localhost:3012/"]
-      interval: 5s
-      timeout: 2s
+      interval: 66s
+      timeout: 5s
       start_period: 30s
       start_interval: 5s
-      retries: 12
+      retries: 5
   postgres-recipes:
     image: pgvector/pgvector:pg${POSTGRES_VERSION:?error}
     environment:
@@ -195,9 +195,11 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
-      interval: 1s
+      interval: 67s
       timeout: 5s
-      retries: 10
+      start_period: 30s
+      start_interval: 5s
+      retries: 5
   pgbackups3:
     build:
       context: https://github.com/miharekar/postgres-backup-s3.git
@@ -234,12 +236,12 @@ services:
       postgres-recipes:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "http://localhost:3000/recipes?query=kale"]
-      interval: 5s
-      timeout: 2s
+      test: ["CMD", "curl", "http://localhost:3000/recipes"]
+      interval: 68s
+      timeout: 5s
       start_period: 30s
       start_interval: 5s
-      retries: 12
+      retries: 5
 
 volumes:
   changedetection-data:
