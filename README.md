@@ -178,7 +178,7 @@ docker image ls
 # Try updating!
 docker compose --env-file ./envs/local.env pull
 docker compose --env-file ./envs/local.env down  # Optional downtime to force restart all containers
-docker compose --env-file ./envs/local.env up -d --remove-orphans --wait --build hikariita archivebox recipes # Needs to be rebuilt from source cause git doesn't automatically update
+docker compose --env-file ./envs/local.env up -d --remove-orphans --wait --build hikariita archivebox # Needs to be rebuilt from source cause git doesn't automatically update
 docker compose --env-file ./envs/local.env up -d --wait
 
 # Clean up?
@@ -200,5 +200,9 @@ pg_restore -h localhost -p 5432 -U postgres -d postgres postgres_2024-10-28T19_2
 ## Run migrations for recipes
 
 ```bash
+docker build --platform linux/amd64 -t markerz/recipes:latest .
+docker image push markerz/recipes:latest
+docker compose --env-file ./envs/local.env pull recipes
+docker compose --env-file ./envs/local.env up -d --wait --no-deps recipes
 docker compose --env-file ./envs/local.env exec -it recipes /bin/sh -c "pnpm migrate"
 ```

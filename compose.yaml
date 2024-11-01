@@ -224,7 +224,7 @@ services:
       POSTGRES_EXTRA_OPTS: '--schema=public --blobs'
       POSTGRES_HOST: postgres-recipes
   recipes:
-    build: https://github.com/nguyenmp/recipes-app.git
+    image: markerz/recipes:latest
     env_file: ${RECIPES_ENV_FILE:?error}
     restart: unless-stopped
     labels:
@@ -242,6 +242,7 @@ services:
       start_period: 30s
       start_interval: 5s
       retries: 5
+    platform: linux/amd64
 
 volumes:
   changedetection-data:
