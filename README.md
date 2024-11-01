@@ -196,3 +196,9 @@ And how to restore from backup:
 ```
 pg_restore -h localhost -p 5432 -U postgres -d postgres postgres_2024-10-28T19_26_17.dump
 ```
+
+## Run migrations for recipes
+
+```bash
+docker compose --env-file ./envs/local.env exec -it recipes /bin/sh -c "pnpm migrate"
+```
