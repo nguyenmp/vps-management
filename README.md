@@ -147,7 +147,7 @@ git merge upstream/dev
 git push
 ```
 
-Sync https://github.com/nguyenmp/docker-cronicle/ (see if we're behind first) with upstream (should be removed after the https://github.com/soulteary/docker-cronicle/pull/27 race condition fix is merged or addressed):
+Sync https://github.com/nguyenmp/docker-cronicle/ (see if we're behind first) with upstream (https://github.com/jhuckaby/Cronicle/releases) (should be removed after the https://github.com/soulteary/docker-cronicle/pull/27 race condition fix is merged or addressed):
 ```
 git clone https://github.com/nguyenmp/docker-cronicle.git
 git remote add upstream https://github.com/soulteary/docker-cronicle.git
