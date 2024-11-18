@@ -93,9 +93,10 @@ services:
       retries: 5
 
   archivebox:
-    build: https://github.com/nguyenmp/ArchiveBox.git#dev
+    image: markerz/archivebox:latest
     volumes:
       - ./archivebox-data/:/data/
+      - ${YT_DLP_COOKIES_FILE:?error}:/data/yt-dlp-cache/cookies.txt
       # ./data/personas/Default/chrome_profile/Default:/data/personas/Default/chrome_profile/Default
     environment:
       # - ADMIN_USERNAME=admin            # create an admin user on first run with the given user/pass combo
@@ -136,6 +137,7 @@ services:
       start_period: 30s
       start_interval: 5s
       retries: 5
+    platform: linux/amd64
   tor-socks-proxy:
     image: peterdavehello/tor-socks-proxy
     expose:

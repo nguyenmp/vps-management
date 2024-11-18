@@ -73,8 +73,11 @@ docker compose --env-file ./envs/local.env run archivebox config --set SAVE_GIT=
 # Keep DOM enabled, even though it uses chrome.  One chrome at a time seems fine, not great but it gets past some paywalls.  Also the size is pretty minimal compared to WARC or singlefile which saves all the assets (images) too.
 # docker compose --env-file ./envs/local.env run archivebox config --set SAVE_DOM=false
 
-# Trigger an OAUTH login flow for yt-dlp to save tokens in the cache
-docker compose --env-file ./envs/local.env exec -it --user archivebox archivebox yt-dlp --cache-dir=/data/yt-dlp-cache/ --write-description --skip-download --write-subs  --username=oauth2 --password= --proxy=socks5://tor-socks-proxy:9150 --write-info-json https://www.youtube.com/watch?v=GYIBYZuwQh4
+# Follow the following url to create a cookies.txt file
+https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies
+# I used the following Firefox extension:
+https://addons.mozilla.org/en-US/firefox/addon/cookies-txt/
+"YT_DLP_COOKIES_FILE=./envs/cookies.txt" >> local.env
 
 # Pick up the new config changes and verify via the admin panel
 docker compose --env-file ./envs/local.env restart archivebox
@@ -121,9 +124,15 @@ docker container logs hikariita
 
 ## To rebuild a specific container image (like if you're updating local ArchiveBox)
 
+Based on https://docs.archivebox.io/dev/README.html#setup-the-dev-environment
+
+Rebase onto latest released version: https://hub.docker.com/r/archivebox/archivebox/tags
+
 ```
 cd ArchiveBox
-docker build .
+git submodule update --init --recursive
+# git pull --recurse-submodules
+docker build --platform linux/amd64 -t markerz/archivebox:latest .
 ```
 
 If it builds, then commit and push.
@@ -131,7 +140,9 @@ If it builds, then commit and push.
 https://stackoverflow.com/questions/36884991/how-to-rebuild-docker-container-in-docker-compose-yml
 
 ```
-docker compose --env-file ./envs/local.env up -d --wait --no-deps --build <service_name>
+docker compose --env-file ./envs/local.env up -d --wait
+docker image push markerz/archivebox:latest
+ansible ...
 ```
 
 ## Updating the server
