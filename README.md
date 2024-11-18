@@ -132,7 +132,7 @@ Rebase onto latest released version: https://hub.docker.com/r/archivebox/archive
 cd ArchiveBox
 git submodule update --init --recursive
 # git pull --recurse-submodules
-docker build --platform linux/amd64 -t markerz/archivebox:latest .
+docker build --platform linux/amd64 -t markerz/archivebox .
 ```
 
 If it builds, then commit and push.
@@ -141,6 +141,7 @@ https://stackoverflow.com/questions/36884991/how-to-rebuild-docker-container-in-
 
 ```
 docker compose --env-file ./envs/local.env up -d --wait
+docker image push markerz/archivebox:v0.8.5rc51
 docker image push markerz/archivebox:latest
 ansible ...
 ```
