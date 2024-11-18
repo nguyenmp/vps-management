@@ -132,7 +132,7 @@ Rebase onto latest released version: https://hub.docker.com/r/archivebox/archive
 cd ArchiveBox
 git submodule update --init --recursive
 # git pull --recurse-submodules
-docker build --platform linux/amd64 -t markerz/archivebox .
+docker build --platform linux/amd64 -t markerz/archivebox:latest -t markerz/archivebox:v0.8.5rc51 .
 ```
 
 If it builds, then commit and push.
