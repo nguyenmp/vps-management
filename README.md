@@ -145,6 +145,12 @@ docker image push markerz/archivebox:latest
 ansible ...
 ```
 
+Note: Sometimes upgrading (or downgrading) will break chromium because the persona version is wrong.  In this case, just delete personal directory in the /data/ folder.  You'll find out when you run a chromium command and get:
+
+```
+The profile appears to be in use by another Chromium process (531) on another computer (f6a12c579e02). Chromium has locked the profile so that it doesn't get corrupted. If you are sure no other processes are using this profile, you can unlock the profile and relaunch Chromium
+```
+
 ## Updating the server
 
 Consider updating traefik while you're at it, it's a hardcoded version whereas everything else is "latest".
