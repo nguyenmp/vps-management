@@ -19,6 +19,7 @@
         rsync_opts:
           - "--exclude=.git"
           - "--exclude=*-data/"
+          # We allow www just cause it's easier that way
 
     # Set up system packages
     - name: Install aptitude the preferred manager
