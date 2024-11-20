@@ -220,14 +220,13 @@ pg_restore -h localhost -p 5432 -U postgres -d postgres postgres_2024-10-28T19_2
 ```bash
 # Local
 docker build --platform linux/amd64 -t markerz/recipes:latest .
-docker image push markerz/recipes:latest
 
 # VPS-Management local
-docker compose --env-file ./envs/local.env pull recipes
 docker compose --env-file ./envs/local.env up -d --wait --no-deps recipes
 docker compose --env-file ./envs/local.env exec -it recipes /bin/sh -c "pnpm migrate"
 
 # Production run ansible playbook
+docker image push markerz/recipes:latest
 ansible ...
 docker compose --env-file ./envs/production.env exec -it recipes /bin/sh -c "pnpm migrate"
 ```
