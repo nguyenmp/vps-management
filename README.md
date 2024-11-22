@@ -199,8 +199,15 @@ docker compose --env-file ./envs/local.env down  # Optional downtime to force re
 docker compose --env-file ./envs/local.env up -d --remove-orphans --wait --build hikariita archivebox # Needs to be rebuilt from source cause git doesn't automatically update
 docker compose --env-file ./envs/local.env up -d --wait
 
-# Clean up?
-docker system prune
+# Clean up
+docker system prune -a
+
+# Also update the OS and packages
+aptitude update
+aptitude upgrade
+
+# And do a reboot to clear out temp (don't run docker down, it'll prevent containers from restarting)
+reboot
 ```
 
 ## Manually backup postgres
