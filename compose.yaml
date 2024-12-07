@@ -285,6 +285,7 @@ services:
     restart: unless-stopped
     environment:
       - BACKEND=reconquer-backend:8000
+      - AUTH=${RECONQUER_AUTH?error}
     platform: linux/amd64
 
 volumes:
