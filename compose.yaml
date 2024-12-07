@@ -286,6 +286,8 @@ services:
     environment:
       - BACKEND=reconquer-backend:8000
       - AUTH=${RECONQUER_AUTH?error}
+    volumes:
+      - ./reconquer-cli-data/:/usr/local/app/snapshots/
     platform: linux/amd64
 
 volumes:
