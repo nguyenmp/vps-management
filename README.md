@@ -237,3 +237,17 @@ docker image push markerz/recipes:latest
 ansible ...
 docker compose --env-file ./envs/production.env exec -it recipes /bin/sh -c "pnpm migrate"
 ```
+
+## Reconquer deploy
+
+```
+cd frontend
+docker build . -t markerz/reconquer.online.cli --platform linux/amd64
+docker push markerz/reconquer.online.cli
+
+cd backend
+docker build . -t markerz/reconquer.online.backend --platform linux/amd64
+docker push markerz/reconquer.online.backend
+
+ansible ...
+```

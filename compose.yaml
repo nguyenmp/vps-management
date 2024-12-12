@@ -273,7 +273,7 @@ services:
     image: markerz/reconquer.online.backend
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "http://reconquer-backend:8000/backend/config"]
+      test: ["CMD", "wget", "http://reconquer-backend:8000/backend/config", "-O", "/dev/null"]
       interval: 68s
       timeout: 5s
       start_period: 30s
@@ -289,6 +289,10 @@ services:
     volumes:
       - ./reconquer-cli-data/:/usr/local/app/snapshots/
     platform: linux/amd64
+    depends_on:
+      reconquer-backend:
+        condition: service_healthy
+
 
 volumes:
   changedetection-data:
