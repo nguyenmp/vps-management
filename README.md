@@ -250,4 +250,6 @@ docker build . -t markerz/reconquer.online.backend --platform linux/amd64
 docker push markerz/reconquer.online.backend
 
 ansible ...
+
+docker container logs -f --since 1m ...
 ```
