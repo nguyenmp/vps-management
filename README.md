@@ -179,9 +179,7 @@ git commit
 git push
 
 cd docker
-docker build --platform linux/amd64 .
-docker image list
-docker image tag <Image_ID> markerz/cronicle:latest
+docker build --platform linux/amd64 . -t markerz/cronicle:latest
 docker image push markerz/cronicle:latest
 ```
 
