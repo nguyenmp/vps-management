@@ -15,7 +15,6 @@ services:
       - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
       - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
       - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
       - "--certificatesresolvers.myresolver.acme.email=nguyenmp605@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
@@ -116,6 +115,8 @@ services:
       - SCREEN_HEIGHT=1024
       - SCREEN_DEPTH=16
       - MAX_CONCURRENT_CHROME_PROCESSES=10
+    labels:
+      - traefik.enable=false
   archivebox:
     image: markerz/archivebox:latest
     volumes:
@@ -292,6 +293,8 @@ services:
     depends_on:
       reconquer-backend:
         condition: service_healthy
+    labels:
+      - traefik.enable=false
 
 
 volumes:
