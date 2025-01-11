@@ -170,7 +170,7 @@ Sync https://github.com/nguyenmp/docker-cronicle/ (see if we're behind first) wi
 git clone https://github.com/nguyenmp/docker-cronicle.git
 git remote add upstream https://github.com/soulteary/docker-cronicle.git
 git fetch upstream
-git merge upstream/dev
+git merge upstream/main
 
 # Update version reference to latest 0.9.59 -> 0.9.61 https://github.com/jhuckaby/Cronicle/releases
 sed -i '.bak' 's/0.9.59/0.9.61/g' # but do it in vscode instead
