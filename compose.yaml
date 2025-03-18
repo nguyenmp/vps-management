@@ -281,20 +281,20 @@ services:
       start_interval: 5s
       retries: 5
     platform: linux/amd64
-  reconquer-cli:
-    image: markerz/reconquer.online.cli
-    restart: unless-stopped
-    environment:
-      - BACKEND=reconquer-backend:8000
-      - AUTH=${RECONQUER_AUTH?error}
-    volumes:
-      - ./reconquer-cli-data/:/usr/local/app/snapshots/
-    platform: linux/amd64
-    depends_on:
-      reconquer-backend:
-        condition: service_healthy
-    labels:
-      - traefik.enable=false
+  # reconquer-cli:
+  #   image: markerz/reconquer.online.cli
+  #   restart: unless-stopped
+  #   environment:
+  #     - BACKEND=reconquer-backend:8000
+  #     - AUTH=${RECONQUER_AUTH?error}
+  #   volumes:
+  #     - ./reconquer-cli-data/:/usr/local/app/snapshots/
+  #   platform: linux/amd64
+  #   depends_on:
+  #     reconquer-backend:
+  #       condition: service_healthy
+  #   labels:
+  #     - traefik.enable=false
 
 
 volumes:
