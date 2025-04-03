@@ -176,11 +176,11 @@ git merge upstream/main
 sed -i '.bak' 's/0.9.59/0.9.61/g' # but do it in vscode instead
 
 git commit
-git push
 
 cd docker
 docker build --platform linux/amd64 . -t markerz/cronicle:latest
 docker image push markerz/cronicle:latest
+git push
 ```
 
 ssh in, then:
