@@ -275,7 +275,7 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "http://reconquer-backend:8000/backend/config", "-O", "/dev/null"]
-      interval: 68s
+      interval: 69s
       timeout: 5s
       start_period: 30s
       start_interval: 5s
@@ -296,6 +296,53 @@ services:
   #   labels:
   #     - traefik.enable=false
 
+  lowcoder-all-in-one:
+    image: lowcoderorg/lowcoder-ce:latest
+    expose:
+      - 3000
+      - 3443
+    env_file:
+      - envs/lowcoder-default.env
+    restart: unless-stopped
+    volumes:
+      - ./lowcoder-data/stacks/:/lowcoder-stacks
+      - ./lowcoder-data/assets/:/lowcoder/assets
+    labels:
+      - "traefik.http.routers.lowcoder.rule=Host(`lowcoder.docker.localhost`) || Host(`lowcoder.href.cat`)"
+      - traefik.http.routers.lowcoder.tls=true
+      - traefik.http.routers.lowcoder.tls.certresolver=myresolver
+      - traefik.http.routers.lowcoder.tls.domains[0].main=lowcoder.href.cat
+      - "traefik.http.services.lowcoder.loadbalancer.server.port=3000"
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:3000/api/status/health"]
+      interval: 70s
+      timeout: 5s
+      start_period: 30s
+      start_interval: 5s
+      retries: 5
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    environment:
+      - N8N_RUNNERS_ENABLED=true
+    expose:
+      - 5678
+    restart: unless-stopped
+    volumes:
+      - ./n8n-data/:/home/node/.n8n
+    labels:
+      - "traefik.http.routers.n8n.rule=Host(`n8n.docker.localhost`) || Host(`n8n.href.cat`)"
+      - traefik.http.routers.n8n.tls=true
+      - traefik.http.routers.n8n.tls.certresolver=myresolver
+      - traefik.http.routers.n8n.tls.domains[0].main=n8n.href.cat
+      - "traefik.http.services.n8n.loadbalancer.server.port=5678"
+    healthcheck:
+      test: ["CMD", "wget", "http://localhost:5678/", "-O", "/dev/null"]
+      interval: 71s
+      timeout: 5s
+      start_period: 30s
+      start_interval: 5s
+      retries: 5
 
 volumes:
   changedetection-data:
