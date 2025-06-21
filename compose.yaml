@@ -325,6 +325,8 @@ services:
     image: docker.n8n.io/n8nio/n8n
     environment:
       - N8N_RUNNERS_ENABLED=true
+      # https://docs.n8n.io/hosting/configuration/configuration-examples/webhook-url/
+      - WEBHOOK_URL=${N8N_WEBHOOK_URL?error}
     expose:
       - 5678
     restart: unless-stopped
