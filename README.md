@@ -208,6 +208,15 @@ aptitude upgrade
 reboot
 ```
 
+## Adding packages to n8n
+
+In Dockerfile, add the package.
+
+```
+docker compose --env-file envs/local.env build  --no-cache n8n
+docker compose --env-file envs/local.env up --detach --wait n8n
+```
+
 ## Manually backup postgres
 
 ```
