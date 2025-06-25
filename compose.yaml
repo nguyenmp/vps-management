@@ -322,7 +322,7 @@ services:
       retries: 5
 
   n8n:
-    image: docker.n8n.io/n8nio/n8n
+    build: n8n/.
     environment:
       - N8N_RUNNERS_ENABLED=true
       # https://docs.n8n.io/hosting/configuration/configuration-examples/webhook-url/
