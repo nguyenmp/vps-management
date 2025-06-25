@@ -325,6 +325,7 @@ services:
     build: n8n/.
     environment:
       - N8N_RUNNERS_ENABLED=true
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
       # https://docs.n8n.io/hosting/configuration/configuration-examples/webhook-url/
       - WEBHOOK_URL=${N8N_WEBHOOK_URL?error}
     expose:
