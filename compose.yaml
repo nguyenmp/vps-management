@@ -328,6 +328,10 @@ services:
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
       # https://docs.n8n.io/hosting/configuration/configuration-examples/webhook-url/
       - WEBHOOK_URL=${N8N_WEBHOOK_URL?error}
+
+      # Trust the X-forwarded-for header from the reverse proxy
+      # https://community.n8n.io/t/x-forwarded-for-header-is-set-but-the-express-trust-proxy-s/51208
+      - N8N_PROXY_HOPS=1
     expose:
       - 5678
     restart: unless-stopped
