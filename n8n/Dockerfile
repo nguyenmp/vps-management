@@ -11,6 +11,9 @@ ENV NODE_FUNCTION_ALLOW_EXTERNAL=moment,lodash,instagram-private-api
 RUN echo "Installing python3"
 RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
 
+RUN echo "Installing ffmpeg (for yt-dlp)"
+RUN apk add --update --no-cache ffmpeg
+
 USER node
 RUN echo "Creating venv for user (not root) so that I can pip install from n8n"
 RUN python3 -m venv /home/node/venv
