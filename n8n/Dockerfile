@@ -4,8 +4,8 @@ FROM n8nio/n8n:latest
 USER root
 
 RUN echo "Installing custom npm packages for n8n"
-RUN npm install -g moment lodash instagram-private-api
-ENV NODE_FUNCTION_ALLOW_EXTERNAL=moment,lodash,instagram-private-api
+RUN npm install -g moment lodash instagram-private-api jsdom
+ENV NODE_FUNCTION_ALLOW_EXTERNAL=moment,lodash,instagram-private-api,jsdom
 
 # https://stackoverflow.com/questions/62554991/how-do-i-install-python-on-alpine-linux
 RUN echo "Installing python3"
