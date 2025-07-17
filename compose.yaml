@@ -332,6 +332,9 @@ services:
       # Trust the X-forwarded-for header from the reverse proxy
       # https://community.n8n.io/t/x-forwarded-for-header-is-set-but-the-express-trust-proxy-s/51208
       - N8N_PROXY_HOPS=1
+
+      - GENERIC_TIMEZONE=America/Los_Angeles
+
     expose:
       - 5678
     restart: unless-stopped
