@@ -56,6 +56,20 @@
         remove_orphans: true
         wait: true
 
+    - name: docker compose up --build
+      community.docker.docker_compose_v2:
+        env_files:
+          - ./envs/production.env
+        project_src: ./vps-management/
+        pull: always
+        build: always
+        services:
+          - n8n
+          - archivebox
+          - hikariita
+        remove_orphans: true
+        wait: true
+
     - name: Prune everything
       community.docker.docker_prune:
         containers: true
