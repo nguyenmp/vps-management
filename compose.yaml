@@ -270,31 +270,6 @@ services:
       start_interval: 5s
       retries: 5
     platform: linux/amd64
-  reconquer-backend:
-    image: markerz/reconquer.online.backend
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "http://reconquer-backend:8000/backend/config", "-O", "/dev/null"]
-      interval: 69s
-      timeout: 5s
-      start_period: 30s
-      start_interval: 5s
-      retries: 5
-    platform: linux/amd64
-  # reconquer-cli:
-  #   image: markerz/reconquer.online.cli
-  #   restart: unless-stopped
-  #   environment:
-  #     - BACKEND=reconquer-backend:8000
-  #     - AUTH=${RECONQUER_AUTH?error}
-  #   volumes:
-  #     - ./reconquer-cli-data/:/usr/local/app/snapshots/
-  #   platform: linux/amd64
-  #   depends_on:
-  #     reconquer-backend:
-  #       condition: service_healthy
-  #   labels:
-  #     - traefik.enable=false
 
   lowcoder-all-in-one:
     image: lowcoderorg/lowcoder-ce:latest
