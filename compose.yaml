@@ -335,5 +335,18 @@ services:
       start_interval: 5s
       retries: 5
 
+  status-redirect:
+    image: traefik/whoami
+    labels:
+      - "traefik.http.routers.status.rule=Host(`status.href.cat`) || Host(`status.docker.localhost`)"
+      - traefik.http.routers.status.tls=true
+      - traefik.http.routers.status.tls.certresolver=myresolver
+      - traefik.http.routers.status.tls.domains[0].main=status.href.cat
+      - "traefik.http.routers.status.middlewares=status-redirect"
+      - "traefik.http.middlewares.status-redirect.redirectregex.regex=^https?://(status\\.href\\.cat|status\\.docker\\.localhost)(.*)"
+      - "traefik.http.middlewares.status-redirect.redirectregex.replacement=https://stats.uptimerobot.com/ZM36nymMTx$2"
+      - "traefik.http.middlewares.status-redirect.redirectregex.permanent=false"
+      - traefik.http.services.status.loadbalancer.server.port=80
+
 volumes:
   changedetection-data:
