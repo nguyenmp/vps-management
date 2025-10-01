@@ -349,8 +349,6 @@ services:
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
-    ports:
-      - "8081:8080"
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
@@ -369,6 +367,12 @@ services:
       start_period: 30s
       start_interval: 5s
       retries: 5
+    labels:
+      - "traefik.http.routers.cadvisor.rule=Host(`cadvisor.docker.localhost`) || Host(`cadvisor.href.cat`)"
+      - traefik.http.routers.cadvisor.tls=true
+      - traefik.http.routers.cadvisor.tls.certresolver=myresolver
+      - traefik.http.routers.cadvisor.tls.domains[0].main=cadvisor.href.cat
+      - "traefik.http.services.cadvisor.loadbalancer.server.port=8080"
 
 volumes:
   changedetection-data:
