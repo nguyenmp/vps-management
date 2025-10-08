@@ -34,6 +34,14 @@ Domains:
 * changes.href.cat
 * hikariita.href.cat
 
+## Monitoring
+
+I use [the basic system monitoring provided by DigitalOcean](https://cloud.digitalocean.com/droplets/448047765/graphs) with alerts on sustained high CPU and disk (85%).
+
+I also have [container level metrics in Grafana Cloud](https://hrefcat.grafana.net/d/mglw6wx/new-dashboard) to diagnose specific container issues.
+
+I use [Portainer to manage individual containers (logs, stats, recreating, updating/pulling)](https://portainer.href.cat/).  Anything that wouldn't require a change to the compose.yaml.  New services I stand up through ansible.  Ansible also handles system upgrades whereas portainer only handles containers.
+
 ## How to Use
 
 Install `ansible` on your local dev machine:
