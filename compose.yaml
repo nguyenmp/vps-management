@@ -347,42 +347,31 @@ services:
       - "traefik.http.middlewares.status-redirect.redirectregex.permanent=false"
       - traefik.http.services.status.loadbalancer.server.port=80
 
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
-    command:
-      - "--docker_only=true"
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      - /dev/disk/:/dev/disk:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    devices:
-      - /dev/kmsg
-    privileged: true
+  telegraf:
+    image: telegraf:latest
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "http://localhost:8080/", "-O", "/dev/null"]
-      interval: 72s
-      timeout: 5s
-      start_period: 30s
-      start_interval: 5s
-      retries: 5
-    labels:
-      - "traefik.http.routers.cadvisor.rule=Host(`cadvisor.docker.localhost`) || Host(`cadvisor.href.cat`)"
-      - traefik.http.routers.cadvisor.tls=true
-      - traefik.http.routers.cadvisor.tls.certresolver=myresolver
-      - traefik.http.routers.cadvisor.tls.domains[0].main=cadvisor.href.cat
-      - "traefik.http.services.cadvisor.loadbalancer.server.port=8080"
+    user: root
+    entrypoint: "telegraf"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+
+  alloy:
+    image: grafana/alloy:latest
+    restart: unless-stopped
+    environment:
+      - ALLOY_LOG_LEVEL=info
+      - GCLOUD_FM_COLLECTOR_ID=${GCLOUD_FM_COLLECTOR_ID:?error}
+      - GCLOUD_RW_API_KEY=${GCLOUD_RW_API_KEY:?error}
+    volumes:
+      - ./config.alloy:/etc/alloy/config.alloy:ro
+
   portainer:
     image: portainer/portainer-ce:lts
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./portainer-data/:/data
-    ports:
-      - 9443:9443
     labels:
       - "traefik.http.routers.portainer.rule=Host(`portainer.docker.localhost`) || Host(`portainer.href.cat`)"
       - traefik.http.routers.portainer.tls=true
