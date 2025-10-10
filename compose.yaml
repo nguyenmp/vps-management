@@ -351,14 +351,26 @@ services:
     image: telegraf:latest
     restart: unless-stopped
     user: root
+    ports:
+      - 9273:9273
     entrypoint: "telegraf"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
 
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    command:
+      - '--path.rootfs=/host'
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - /:/host:ro
+
   alloy:
     image: grafana/alloy:latest
     restart: unless-stopped
+    network_mode: host
     environment:
       - ALLOY_LOG_LEVEL=info
       - GCLOUD_FM_COLLECTOR_ID=${GCLOUD_FM_COLLECTOR_ID:?error}

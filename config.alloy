@@ -11,10 +11,17 @@
 
 prometheus.scrape "telegraf" {
   targets = [
-    { __address__ = "telegraf:9273" },
+    { __address__ = "localhost:9273" },
   ]
   forward_to = [prometheus.remote_write.metrics_service.receiver]
   scrape_interval = "60s"
+}
+
+prometheus.scrape "node_exporter" {
+  targets = [
+    { __address__ = "localhost:9100" },
+  ]
+  forward_to = [prometheus.remote_write.metrics_service.receiver]
 }
 
 prometheus.remote_write "metrics_service" {
