@@ -391,5 +391,21 @@ services:
       - traefik.http.routers.portainer.tls.domains[0].main=portainer.href.cat
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
 
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    volumes:
+      - ./audiobookshelf-data/audiobooks:/audiobooks
+      - ./audiobookshelf-data/podcasts:/podcasts
+      - ./audiobookshelf-data/config:/config
+      - ./audiobookshelf-data/metadata:/metadata
+    environment:
+      - TZ="America/Los_Angeles"
+    labels:
+      - "traefik.http.routers.audiobookshelf.rule=Host(`audiobookshelf.docker.localhost`) || Host(`audiobookshelf.href.cat`)"
+      - traefik.http.routers.audiobookshelf.tls=true
+      - traefik.http.routers.audiobookshelf.tls.certresolver=myresolver
+      - traefik.http.routers.audiobookshelf.tls.domains[0].main=audiobookshelf.href.cat
+      - "traefik.http.services.audiobookshelf.loadbalancer.server.port=80"
+
 volumes:
   changedetection-data:
