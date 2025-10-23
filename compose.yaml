@@ -366,7 +366,8 @@ services:
     restart: unless-stopped
     volumes:
       - /:/host:ro
-
+    labels:
+      - traefik.enable=false
   alloy:
     image: grafana/alloy:latest
     restart: unless-stopped
@@ -377,6 +378,8 @@ services:
       - GCLOUD_RW_API_KEY=${GCLOUD_RW_API_KEY:?error}
     volumes:
       - ./config.alloy:/etc/alloy/config.alloy:ro
+    labels:
+      - traefik.enable=false
 
   portainer:
     image: portainer/portainer-ce:lts
