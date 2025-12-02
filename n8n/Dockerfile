@@ -14,6 +14,9 @@ RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
 RUN echo "Installing ffmpeg (for yt-dlp)"
 RUN apk add --update --no-cache ffmpeg
 
+RUN echo "Installing deno (for yt-dlp)"
+RUN curl -fsSL https://deno.land/install.sh | sh
+
 USER node
 RUN echo "Creating venv for user (not root) so that I can pip install from n8n"
 RUN python3 -m venv /home/node/venv
@@ -22,5 +25,5 @@ RUN python3 -m ensurepip
 RUN pip install --upgrade pip
 
 RUN echo "Installing yt-dlp"
-RUN pip install yt-dlp
+RUN pip install "yt-dlp[default]"
 
