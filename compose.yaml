@@ -341,6 +341,9 @@ services:
       - QUEUE_BULL_REDIS_HOST=redis
       - QUEUE_BULL_REDIS_PORT=6379
 
+      - NODES_EXCLUDE="[]"
+      - N8N_RESTRICT_FILE_ACCESS_TO="/home/node/.n8n-files/;/tmp/;/home/node/"
+
 
     expose:
       - 5678
