@@ -20,6 +20,9 @@ RUN apk add --update --no-cache ffmpeg
 RUN echo "Installing deno (for yt-dlp)"
 RUN curl -fsSL https://deno.land/install.sh | sh
 
+RUN echo "Installing aws-cli"
+RUN apk add --update --no-cache aws-cli
+
 USER node
 RUN echo "Creating venv for user (not root) so that I can pip install from n8n"
 RUN python3 -m venv /home/node/venv
