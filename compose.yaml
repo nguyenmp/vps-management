@@ -277,7 +277,7 @@ services:
     platform: linux/amd64
 
   lowcoder-all-in-one:
-    image: lowcoderorg/lowcoder-ce:2.7.4
+    image: lowcoderorg/lowcoder-ce:2.7.6
     expose:
       - 3000
       - 3443
