@@ -65,6 +65,7 @@
         build: always
         services:
           - n8n
+          - n8n-worker
           - archivebox
           - hikariita
         remove_orphans: true
