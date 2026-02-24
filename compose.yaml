@@ -446,6 +446,7 @@ services:
 
   status-redirect:
     image: traefik/whoami
+    restart: unless-stopped
     labels:
       - "traefik.http.routers.status.rule=Host(`status.href.cat`) || Host(`status.docker.localhost`)"
       - traefik.http.routers.status.tls=true
@@ -459,6 +460,7 @@ services:
 
   href-redirect:
     image: traefik/whoami
+    restart: unless-stopped
     labels:
       - "traefik.http.routers.href.rule=Host(`href.cat`) || Host(`docker.localhost`)"
       - traefik.http.routers.href.tls=true
@@ -525,6 +527,7 @@ services:
       - ./audiobookshelf-data/podcasts:/podcasts
       - ./audiobookshelf-data/config:/config
       - ./audiobookshelf-data/metadata:/metadata
+    restart: unless-stopped
     environment:
       - TZ="America/Los_Angeles"
     labels:
