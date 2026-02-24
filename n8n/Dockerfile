@@ -9,8 +9,8 @@ ENV NODE_FUNCTION_ALLOW_EXTERNAL=moment,lodash,instagram-private-api,jsdom,md5
 
 # https://stackoverflow.com/questions/62554991/how-do-i-install-python-on-alpine-linux
 RUN echo "Installing python3"
-RUN wget https://dl-cdn.alpinelinux.org/alpine/v3.23/main/$(uname -m)/apk-tools-static-3.0.3-r1.apk
-RUN tar -xzf apk-tools-static-3.0.3-r1.apk -C /
+RUN wget https://dl-cdn.alpinelinux.org/alpine/v3.23/main/$(uname -m)/apk-tools-static-3.0.4-r0.apk
+RUN tar -xzf apk-tools-static-3.0.4-r0.apk -C /
 RUN /sbin/apk.static add apk-tools
 RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
 
