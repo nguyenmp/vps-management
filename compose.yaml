@@ -191,30 +191,6 @@ services:
       - ./sonic-data/sonic:/var/lib/sonic/store
     restart: unless-stopped
     platform: linux/amd64
-  cron:
-    image: markerz/cronicle
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./cron-data/data/:/opt/cronicle/data
-      - ./cron-data/logs/:/opt/cronicle/logs
-      - ./cron-data/plugins/:/opt/cronicle/plugins
-    expose:
-      - 3012
-    restart: unless-stopped
-    labels:
-      - "traefik.http.routers.cron.rule=Host(`cron.docker.localhost`) || Host(`cron.href.cat`)"
-      - traefik.http.routers.cron.tls=true
-      - traefik.http.routers.cron.tls.certresolver=myresolver
-      - traefik.http.routers.cron.tls.domains[0].main=cron.href.cat
-      - traefik.http.services.cron.loadbalancer.server.port=3012
-    platform: linux/amd64
-    healthcheck:
-      test: ["CMD", "curl", "http://localhost:3012/"]
-      interval: 66s
-      timeout: 5s
-      start_period: 30s
-      start_interval: 5s
-      retries: 5
   postgres-recipes:
     image: pgvector/pgvector:pg${POSTGRES_VERSION:?error}
     environment:
