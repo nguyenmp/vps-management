@@ -512,6 +512,44 @@ services:
       - traefik.http.routers.audiobookshelf.tls.certresolver=myresolver
       - traefik.http.routers.audiobookshelf.tls.domains[0].main=audiobookshelf.href.cat
       - "traefik.http.services.audiobookshelf.loadbalancer.server.port=80"
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main-slim
+    volumes:
+      - ./open-webui-data/:/app/backend/data
+    restart: unless-stopped
+    labels:
+      - "traefik.http.routers.open-webui.rule=Host(`openwebui.docker.localhost`) || Host(`openwebui.href.cat`)"
+      - traefik.http.routers.open-webui.tls=true
+      - traefik.http.routers.open-webui.tls.certresolver=myresolver
+      - traefik.http.routers.open-webui.tls.domains[0].main=openwebui.href.cat
+      - "traefik.http.services.open-webui.loadbalancer.server.port=8080"
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:8080/"]
+      interval: 66s
+      timeout: 5s
+      start_period: 30s
+      start_interval: 5s
+      retries: 5
+  litellm:
+    image: docker.litellm.ai/berriai/litellm:main-latest
+    environment:
+      - STORE_MODEL_IN_DB=true
+      - LITELLM_MASTER_KEY=${LITELLM_ADMIN_PASSWORD:?error}
+      - DATABASE_URL=postgresql://neondb_owner:${LITELLM_NEON_PASSWORD:?error}@ep-frosty-sunset-aaufbgim-pooler.westus3.azure.neon.tech/neondb?sslmode=require&channel_binding=require
+    restart: unless-stopped
+    labels:
+      - "traefik.http.routers.litellm.rule=Host(`litellm.docker.localhost`) || Host(`litellm.href.cat`)"
+      - traefik.http.routers.litellm.tls=true
+      - traefik.http.routers.litellm.tls.certresolver=myresolver
+      - traefik.http.routers.litellm.tls.domains[0].main=litellm.href.cat
+      - "traefik.http.services.litellm.loadbalancer.server.port=4000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests ; requests.get('http://localhost:4000').raise_for_status()"]
+      interval: 66s
+      timeout: 5s
+      start_period: 30s
+      start_interval: 5s
+      retries: 5
 
 volumes:
   changedetection-data:
