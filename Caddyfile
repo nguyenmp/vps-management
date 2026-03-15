@@ -1,0 +1,57 @@
+{
+    email nguyenmp605@gmail.com
+}
+
+# Redirects
+origin.href.cat, docker.localhost {
+    redir https://aggressivelyparaphrasing.me{uri} temporary
+}
+
+origin.status.href.cat, status.docker.localhost {
+    redir https://stats.uptimerobot.com/ZM36nymMTx{uri} temporary
+}
+
+# Services
+origin.hikariita.href.cat, hikariita.docker.localhost {
+    reverse_proxy hikariita:80
+}
+
+origin.static.href.cat, static.docker.localhost {
+    reverse_proxy nginx:80
+}
+
+origin.changes.href.cat, changes.docker.localhost {
+    reverse_proxy changedetection:5000
+}
+
+origin.archivebox.href.cat, archivebox.docker.localhost {
+    reverse_proxy archivebox:8000
+}
+
+origin.recipes.href.cat, recipes.docker.localhost {
+    reverse_proxy recipes:3000
+}
+
+origin.lowcoder.href.cat, lowcoder.docker.localhost {
+    reverse_proxy lowcoder-all-in-one:3000
+}
+
+origin.n8n.href.cat, n8n.docker.localhost {
+    reverse_proxy n8n:5678
+}
+
+origin.portainer.href.cat, portainer.docker.localhost {
+    reverse_proxy portainer:9000
+}
+
+origin.audiobookshelf.href.cat, audiobookshelf.docker.localhost {
+    reverse_proxy audiobookshelf:80
+}
+
+origin.openwebui.href.cat, openwebui.docker.localhost {
+    reverse_proxy open-webui:8080
+}
+
+origin.litellm.href.cat, litellm.docker.localhost {
+    reverse_proxy litellm:4000
+}

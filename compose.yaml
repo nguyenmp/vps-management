@@ -2,36 +2,18 @@
 ---
 
 services:
-  reverse-proxy:
-    # The official v3 Traefik docker image
-    image: traefik
-    # Enables the web UI and tells Traefik to listen to docker
-    command:
-      - "--api=true"
-      - "--api.insecure=true"
-      - "--providers.docker"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
-      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
-      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.myresolver.acme.email=nguyenmp605@gmail.com"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+  caddy:
+    image: caddy:latest
     ports:
-      # The HTTP port
       - "80:80"
-      # The HTTP port
       - "443:443"
-      # The Web UI (enabled by --api.insecure=true)
-      - "8080:8080"
     volumes:
-      # So that Traefik can listen to the Docker events
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./letsencrypt-data/:/letsencrypt/
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy-data/:/data/
+      - ./caddy-config/:/config/
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "http://localhost:8080", "-O", "-"]
+      test: ["CMD", "curl", "http://localhost:80"]
       interval: 60s
       timeout: 5s
       start_period: 30s
