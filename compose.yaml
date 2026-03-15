@@ -24,12 +24,6 @@ services:
     volumes:
       - ${HIKARIITA_DB_FILE:?error}:/usr/src/app/example.db
     restart: unless-stopped
-    labels:
-      - "traefik.http.routers.hikariita.rule=Host(`hikariita.docker.localhost`) || Host(`hikariita.href.cat`)"
-      - traefik.http.routers.hikariita.tls=true
-      - traefik.http.routers.hikariita.tls.certresolver=myresolver
-      - traefik.http.routers.hikariita.tls.domains[0].main=hikariita.href.cat
-      - traefik.http.services.hikariita.loadbalancer.server.port=80
     healthcheck:
       test: ["CMD", "curl", "http://localhost:80/"]
       interval: 61s
@@ -45,12 +39,6 @@ services:
     environment:
       - NGINX_PORT=80
     restart: unless-stopped
-    labels:
-      - "traefik.http.routers.static.rule=Host(`static.docker.localhost`) || Host(`static.href.cat`)"
-      - traefik.http.routers.static.tls=true
-      - traefik.http.routers.static.tls.certresolver=myresolver
-      - traefik.http.routers.static.tls.domains[0].main=static.href.cat
-      - traefik.http.services.static.loadbalancer.server.port=80
     healthcheck:
       test: ["CMD", "curl", "http://localhost:80/"]
       interval: 62s
@@ -68,12 +56,6 @@ services:
     volumes:
       - ./changedetection-data/:/datastore/
     restart: unless-stopped
-    labels:
-      - "traefik.http.routers.changes.rule=Host(`changes.docker.localhost`) || Host(`changes.href.cat`)"
-      - traefik.http.routers.changes.tls=true
-      - traefik.http.routers.changes.tls.certresolver=myresolver
-      - traefik.http.routers.changes.tls.domains[0].main=changes.href.cat
-      - traefik.http.services.changes.loadbalancer.server.port=5000
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import requests; requests.get('http://localhost:5000').raise_for_status()\""]
       interval: 63s
@@ -100,8 +82,6 @@ services:
       - SCREEN_HEIGHT=1024
       - SCREEN_DEPTH=16
       - MAX_CONCURRENT_CHROME_PROCESSES=10
-    labels:
-      - traefik.enable=false
   archivebox:
     image: markerz/archivebox:latest
     volumes:
@@ -135,12 +115,6 @@ services:
     # dns:
     #   - 172.20.0.53
     restart: unless-stopped
-    labels:
-      - "traefik.http.routers.archivebox.rule=Host(`archivebox.docker.localhost`) || Host(`archivebox.href.cat`)"
-      - traefik.http.routers.archivebox.tls=true
-      - traefik.http.routers.archivebox.tls.certresolver=myresolver
-      - traefik.http.routers.archivebox.tls.domains[0].main=archivebox.href.cat
-      - traefik.http.services.archivebox.loadbalancer.server.port=8000
     healthcheck:
       test: ["CMD", "curl", "http://localhost:8000/"]
       interval: 64s
@@ -216,12 +190,6 @@ services:
     image: markerz/recipes:latest
     env_file: ${RECIPES_ENV_FILE:?error}
     restart: unless-stopped
-    labels:
-      - "traefik.http.routers.recipes.rule=Host(`recipes.docker.localhost`) || Host(`recipes.href.cat`)"
-      - traefik.http.routers.recipes.tls=true
-      - traefik.http.routers.recipes.tls.certresolver=myresolver
-      - traefik.http.routers.recipes.tls.domains[0].main=recipes.href.cat
-      - traefik.http.services.recipes.loadbalancer.server.port=3000
     depends_on:
       postgres-recipes:
         condition: service_healthy
@@ -245,12 +213,6 @@ services:
     volumes:
       - ./lowcoder-data/stacks/:/lowcoder-stacks
       - ./lowcoder-data/assets/:/lowcoder/assets
-    labels:
-      - "traefik.http.routers.lowcoder.rule=Host(`lowcoder.docker.localhost`) || Host(`lowcoder.href.cat`)"
-      - traefik.http.routers.lowcoder.tls=true
-      - traefik.http.routers.lowcoder.tls.certresolver=myresolver
-      - traefik.http.routers.lowcoder.tls.domains[0].main=lowcoder.href.cat
-      - "traefik.http.services.lowcoder.loadbalancer.server.port=3000"
     healthcheck:
       test: ["CMD", "curl", "http://localhost:3000/api/status/health"]
       interval: 70s
@@ -311,12 +273,6 @@ services:
     depends_on:
       postgres-recipes:
         condition: service_healthy
-    labels:
-      - "traefik.http.routers.n8n.rule=Host(`n8n.docker.localhost`) || Host(`n8n.href.cat`)"
-      - traefik.http.routers.n8n.tls=true
-      - traefik.http.routers.n8n.tls.certresolver=myresolver
-      - traefik.http.routers.n8n.tls.domains[0].main=n8n.href.cat
-      - "traefik.http.services.n8n.loadbalancer.server.port=5678"
     healthcheck:
       test: ["CMD", "wget", "http://localhost:5678/", "-O", "/dev/null"]
       interval: 71s
@@ -402,34 +358,6 @@ services:
       start_interval: 5s
       retries: 5
 
-  status-redirect:
-    image: traefik/whoami
-    restart: unless-stopped
-    labels:
-      - "traefik.http.routers.status.rule=Host(`status.href.cat`) || Host(`status.docker.localhost`)"
-      - traefik.http.routers.status.tls=true
-      - traefik.http.routers.status.tls.certresolver=myresolver
-      - traefik.http.routers.status.tls.domains[0].main=status.href.cat
-      - "traefik.http.routers.status.middlewares=status-redirect"
-      - "traefik.http.middlewares.status-redirect.redirectregex.regex=^https?://(status\\.href\\.cat|status\\.docker\\.localhost)(.*)"
-      - "traefik.http.middlewares.status-redirect.redirectregex.replacement=https://stats.uptimerobot.com/ZM36nymMTx$2"
-      - "traefik.http.middlewares.status-redirect.redirectregex.permanent=false"
-      - traefik.http.services.status.loadbalancer.server.port=80
-
-  href-redirect:
-    image: traefik/whoami
-    restart: unless-stopped
-    labels:
-      - "traefik.http.routers.href.rule=Host(`href.cat`) || Host(`docker.localhost`)"
-      - traefik.http.routers.href.tls=true
-      - traefik.http.routers.href.tls.certresolver=myresolver
-      - traefik.http.routers.href.tls.domains[0].main=href.cat
-      - "traefik.http.routers.href.middlewares=href-redirect"
-      - "traefik.http.middlewares.href-redirect.redirectregex.regex=^https?://(href\\.cat|docker\\.localhost)(.*)"
-      - "traefik.http.middlewares.href-redirect.redirectregex.replacement=https://aggressivelyparaphrasing.me$2"
-      - "traefik.http.middlewares.href-redirect.redirectregex.permanent=false"
-      - traefik.http.services.href.loadbalancer.server.port=80
-
   telegraf:
     image: telegraf:latest
     restart: unless-stopped
@@ -449,8 +377,6 @@ services:
     restart: unless-stopped
     volumes:
       - /:/host:ro
-    labels:
-      - traefik.enable=false
   alloy:
     image: grafana/alloy:latest
     restart: unless-stopped
@@ -462,8 +388,6 @@ services:
       - DOCKER_HOSTNAME=${HOSTNAME:?error}
     volumes:
       - ./config.alloy:/etc/alloy/config.alloy:ro
-    labels:
-      - traefik.enable=false
 
   portainer:
     image: portainer/portainer-ce:lts
@@ -471,12 +395,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./portainer-data/:/data
-    labels:
-      - "traefik.http.routers.portainer.rule=Host(`portainer.docker.localhost`) || Host(`portainer.href.cat`)"
-      - traefik.http.routers.portainer.tls=true
-      - traefik.http.routers.portainer.tls.certresolver=myresolver
-      - traefik.http.routers.portainer.tls.domains[0].main=portainer.href.cat
-      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
 
   audiobookshelf:
     image: ghcr.io/advplyr/audiobookshelf:latest
@@ -488,23 +406,11 @@ services:
     restart: unless-stopped
     environment:
       - TZ="America/Los_Angeles"
-    labels:
-      - "traefik.http.routers.audiobookshelf.rule=Host(`audiobookshelf.docker.localhost`) || Host(`audiobookshelf.href.cat`)"
-      - traefik.http.routers.audiobookshelf.tls=true
-      - traefik.http.routers.audiobookshelf.tls.certresolver=myresolver
-      - traefik.http.routers.audiobookshelf.tls.domains[0].main=audiobookshelf.href.cat
-      - "traefik.http.services.audiobookshelf.loadbalancer.server.port=80"
   open-webui:
     image: ghcr.io/open-webui/open-webui:main-slim
     volumes:
       - ./open-webui-data/:/app/backend/data
     restart: unless-stopped
-    labels:
-      - "traefik.http.routers.open-webui.rule=Host(`openwebui.docker.localhost`) || Host(`openwebui.href.cat`)"
-      - traefik.http.routers.open-webui.tls=true
-      - traefik.http.routers.open-webui.tls.certresolver=myresolver
-      - traefik.http.routers.open-webui.tls.domains[0].main=openwebui.href.cat
-      - "traefik.http.services.open-webui.loadbalancer.server.port=8080"
     healthcheck:
       test: ["CMD", "curl", "http://localhost:8080/"]
       interval: 66s
@@ -519,12 +425,6 @@ services:
       - LITELLM_MASTER_KEY=${LITELLM_ADMIN_PASSWORD:?error}
       - DATABASE_URL=postgresql://neondb_owner:${LITELLM_NEON_PASSWORD:?error}@ep-frosty-sunset-aaufbgim-pooler.westus3.azure.neon.tech/neondb?sslmode=require&channel_binding=require
     restart: unless-stopped
-    labels:
-      - "traefik.http.routers.litellm.rule=Host(`litellm.docker.localhost`) || Host(`litellm.href.cat`)"
-      - traefik.http.routers.litellm.tls=true
-      - traefik.http.routers.litellm.tls.certresolver=myresolver
-      - traefik.http.routers.litellm.tls.domains[0].main=litellm.href.cat
-      - "traefik.http.services.litellm.loadbalancer.server.port=4000"
     healthcheck:
       test: ["CMD", "python", "-c", "import requests ; requests.get('http://localhost:4000').raise_for_status()"]
       interval: 66s
