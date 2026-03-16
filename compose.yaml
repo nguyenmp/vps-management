@@ -4,6 +4,8 @@
 services:
   caddy:
     image: caddy:latest
+    environment:
+      - MARIMO_PASSWORD_HASH=${MARIMO_PASSWORD_HASH:?error}
     ports:
       - "80:80"
       - "443:443"

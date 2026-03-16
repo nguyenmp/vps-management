@@ -57,5 +57,8 @@ litellm.href.cat, litellm.docker.localhost {
 }
 
 origin.marimo.href.cat, marimo.docker.localhost {
+    basic_auth {
+        admin {$MARIMO_PASSWORD_HASH}
+    }
     reverse_proxy marimo:8080
 }
