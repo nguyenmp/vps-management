@@ -391,6 +391,8 @@ services:
 
   portainer:
     image: portainer/portainer-ce:lts
+    environment:
+      - TRUSTED_ORIGINS=origin.portainer.href.cat,portainer.href.cat,portainer.docker.localhost
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -432,6 +434,18 @@ services:
       start_period: 30s
       start_interval: 5s
       retries: 5
+
+  marimo:
+    image: ghcr.io/marimo-team/marimo:latest
+    volumes:
+      - ./marimo-data/:/app/
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request ; urllib.request.urlopen(urllib.request.Request('http://localhost:8080'))"]
+      interval: 66s
+      timeout: 5s
+      start_period: 30s
+      start_interval: 5s
 
 volumes:
   changedetection-data:

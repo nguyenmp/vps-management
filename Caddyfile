@@ -52,6 +52,10 @@ origin.openwebui.href.cat, openwebui.docker.localhost {
     reverse_proxy open-webui:8080
 }
 
-origin.litellm.href.cat, litellm.docker.localhost {
+litellm.href.cat, litellm.docker.localhost {
     reverse_proxy litellm:4000
+}
+
+origin.marimo.href.cat, marimo.docker.localhost {
+    reverse_proxy marimo:8080
 }
