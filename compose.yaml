@@ -153,8 +153,6 @@ services:
     image: pgvector/pgvector:pg${POSTGRES_VERSION:?error}
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?error}
-    ports:
-      - 5432:5432
     volumes:
       - ./postgres-recipes-data/:/var/lib/postgresql/data
     restart: unless-stopped
