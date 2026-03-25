@@ -186,21 +186,6 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?error}
       POSTGRES_EXTRA_OPTS: '--schema=public --blobs'
       POSTGRES_HOST: postgres-recipes
-  recipes:
-    image: markerz/recipes:latest
-    env_file: ${RECIPES_ENV_FILE:?error}
-    restart: unless-stopped
-    depends_on:
-      postgres-recipes:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "http://localhost:3000/recipes"]
-      interval: 68s
-      timeout: 5s
-      start_period: 30s
-      start_interval: 5s
-      retries: 5
-    platform: linux/amd64
 
   lowcoder-all-in-one:
     image: lowcoderorg/lowcoder-ce:latest
