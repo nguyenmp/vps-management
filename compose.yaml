@@ -236,10 +236,10 @@ services:
       # Reactivate license
       - DB_TYPE=postgresdb
       - DB_POSTGRESDB_HOST=postgres-recipes
-      - DB_POSTGRESDB_DATABASE=n8n
+      - DB_POSTGRESDB_DATABASE=n8n_db
       - DB_POSTGRESDB_PORT=5432
-      - DB_POSTGRESDB_USER=postgres
-      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD:?error}
+      - DB_POSTGRESDB_USER=n8n_login
+      - DB_POSTGRESDB_PASSWORD=${N8N_POSTGRES_PASSWORD:?error}
       - DB_POSTGRESDB_SCHEMA=public
 
       - EXECUTIONS_MODE=queue
@@ -298,10 +298,10 @@ services:
       # Reactivate license
       - DB_TYPE=postgresdb
       - DB_POSTGRESDB_HOST=postgres-recipes
-      - DB_POSTGRESDB_DATABASE=n8n
+      - DB_POSTGRESDB_DATABASE=n8n_db
       - DB_POSTGRESDB_PORT=5432
-      - DB_POSTGRESDB_USER=postgres
-      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD:?error}
+      - DB_POSTGRESDB_USER=n8n_login
+      - DB_POSTGRESDB_PASSWORD=${N8N_POSTGRES_PASSWORD:?error}
       - DB_POSTGRESDB_SCHEMA=public
 
       - EXECUTIONS_MODE=queue
@@ -411,7 +411,7 @@ services:
     environment:
       - STORE_MODEL_IN_DB=true
       - LITELLM_MASTER_KEY=${LITELLM_ADMIN_PASSWORD:?error}
-      - DATABASE_URL=postgresql://neondb_owner:${LITELLM_NEON_PASSWORD:?error}@ep-frosty-sunset-aaufbgim-pooler.westus3.azure.neon.tech/neondb?sslmode=require&channel_binding=require
+      - DATABASE_URL=postgresql://litellm_login:${LITELLM_POSTGRES_PASSWORD:?error}@postgres-recipes:5432/litellm_db
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "python", "-c", "import requests ; requests.get('http://localhost:4000').raise_for_status()"]
