@@ -249,8 +249,6 @@ services:
 
       - NODES_EXCLUDE="[]"
       - N8N_RESTRICT_FILE_ACCESS_TO="/home/node/.n8n-files/;/tmp/;/home/node/"
-
-
     expose:
       - 5678
     restart: unless-stopped
@@ -312,14 +310,14 @@ services:
 
       - NODES_EXCLUDE="[]"
       - N8N_RESTRICT_FILE_ACCESS_TO="/home/node/.n8n-files/;/tmp/;/home/node/"
-
-
     expose:
       - 5678
     restart: unless-stopped
     volumes:
       - ./n8n-data/:/home/node/.n8n
     depends_on:
+      n8n:
+        condition: service_healthy
       postgres-recipes:
         condition: service_healthy
     healthcheck:
@@ -399,6 +397,9 @@ services:
     volumes:
       - ./open-webui-data/:/app/backend/data
     restart: unless-stopped
+    depends_on:
+      litellm:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "http://localhost:8080/"]
       interval: 66s
@@ -412,6 +413,9 @@ services:
       - STORE_MODEL_IN_DB=true
       - LITELLM_MASTER_KEY=${LITELLM_ADMIN_PASSWORD:?error}
       - DATABASE_URL=postgresql://litellm_login:${LITELLM_POSTGRES_PASSWORD:?error}@postgres-recipes:5432/litellm_db
+    depends_on:
+      postgres-recipes:
+        condition: service_healthy
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "python", "-c", "import requests ; requests.get('http://localhost:4000').raise_for_status()"]
@@ -432,6 +436,7 @@ services:
       timeout: 5s
       start_period: 30s
       start_interval: 5s
+      retries: 5
 
 volumes:
   changedetection-data:
