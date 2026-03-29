@@ -409,6 +409,8 @@ services:
       retries: 5
   litellm:
     image: docker.litellm.ai/berriai/litellm:main-latest
+    volumes:
+      - ./litellm_config.yaml:/app/config.yaml
     environment:
       - STORE_MODEL_IN_DB=true
       - LITELLM_MASTER_KEY=${LITELLM_ADMIN_PASSWORD:?error}
