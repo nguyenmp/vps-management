@@ -47,6 +47,11 @@
         state: latest
         update_cache: true
 
+    - name: docker compose pull
+      ansible.builtin.shell:
+        cmd: docker compose --env-file ./envs/production.env pull
+        chdir: ./vps-management/
+
     - name: docker compose up
       community.docker.docker_compose_v2:
         env_files:
