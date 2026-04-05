@@ -62,3 +62,7 @@ origin.marimo.href.cat, marimo.docker.localhost {
     }
     reverse_proxy marimo:8080
 }
+
+syncthing.href.cat {
+    reverse_proxy syncthing:8384
+}
