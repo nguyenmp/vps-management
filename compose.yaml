@@ -406,7 +406,7 @@ services:
       timeout: 5s
       start_period: 30s
       start_interval: 5s
-      retries: 5
+      retries: 9
   litellm:
     image: docker.litellm.ai/berriai/litellm:main-latest
     volumes:
