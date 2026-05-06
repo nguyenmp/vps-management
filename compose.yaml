@@ -464,5 +464,17 @@ services:
       timeout: 10s
       retries: 3
 
+  openproject:
+    image: openproject/openproject:17
+    expose:
+      - 8080
+    environment:
+      - OPENPROJECT_HOST__NAME=openproject.href.cat
+      - SECRET_KEY_BASE=${OPENPROJECT_SECRET_KEY_BASE:?error}
+    volumes:
+      - ./openproject-data/pgdata:/var/openproject/pgdata
+      - ./openproject-data/assets:/var/openproject/assets
+    restart: unless-stopped
+
 volumes:
   changedetection-data:
