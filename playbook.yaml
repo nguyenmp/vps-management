@@ -52,16 +52,31 @@
         cmd: docker compose --env-file ./envs/production.env pull
         chdir: ./vps-management/
 
-    - name: docker compose up
+    - name: docker compose up --build archivebox
       community.docker.docker_compose_v2:
         env_files:
           - ./envs/production.env
         project_src: ./vps-management/
         pull: always
+        build: always
+        services:
+          - archivebox
         remove_orphans: true
         wait: true
 
-    - name: docker compose up --build
+    - name: docker compose up --build hikariita
+      community.docker.docker_compose_v2:
+        env_files:
+          - ./envs/production.env
+        project_src: ./vps-management/
+        pull: always
+        build: always
+        services:
+          - hikariita
+        remove_orphans: true
+        wait: true
+
+    - name: docker compose up --build n8n n8n-worker
       community.docker.docker_compose_v2:
         env_files:
           - ./envs/production.env
@@ -71,8 +86,15 @@
         services:
           - n8n
           - n8n-worker
-          - archivebox
-          - hikariita
+        remove_orphans: true
+        wait: true
+
+    - name: docker compose up (everything else)
+      community.docker.docker_compose_v2:
+        env_files:
+          - ./envs/production.env
+        project_src: ./vps-management/
+        pull: always
         remove_orphans: true
         wait: true
 
