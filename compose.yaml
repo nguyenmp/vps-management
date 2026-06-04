@@ -475,6 +475,17 @@ services:
       - ./openproject-data/pgdata:/var/openproject/pgdata
       - ./openproject-data/assets:/var/openproject/assets
     restart: unless-stopped
-
+  vikunja:
+    image: vikunja/vikunja:2.3.0
+    environment:
+      VIKUNJA_SERVICE_PUBLICURL: https://vikunja.href.cat/
+      VIKUNJA_SERVICE_SECRET: b3e1717c7222092a57d6052c8564f79217f4d1b47d81895d3dec7b5cd19a1356
+      VIKUNJA_DATABASE_PATH: /db/vikunja.db
+    expose:
+      - 3456
+    volumes:
+      - ./vikunja-data/files:/app/vikunja/files
+      - ./vikunja-data/db:/db
+    restart: unless-stopped
 volumes:
   changedetection-data:

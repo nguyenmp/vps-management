@@ -70,3 +70,7 @@ syncthing.href.cat {
 openproject.href.cat {
     reverse_proxy openproject:8080
 }
+
+vikunja.href.cat {
+    reverse_proxy vikunja:3456
+}
