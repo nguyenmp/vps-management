@@ -1,0 +1,18 @@
+Alright, I want to automate this process I have.  I use an LLM stack where locally, I run `opencode` locally to interact with a model as an agent.  Opencode is configured to use the models hosted at https://litellm.href.cat/.  LiteLLM is a proxy to manage all my LLM provider keys and track spend across different platforms and debug logs.  LiteLLM is what talks to my actual cloud LLM providers like Deepseek and Anthropic and DeepInfra.
+
+So when I want to use a new LLM model, like right now I want to use zai-org/GLM-5.2 from DeepInfra.  I visit https://deepinfra.com/models/text-generation?q=glm, grab the model name and costs associated ($0.95 in, $3.00 out, $0.18 cached / 1M tokens).
+
+Then I insert that info into my LiteLLM config (db, not file) at https://litellm.href.cat/ so that LiteLLM exposes a model named deepinfra/zai-org/GLM-5.2 but points to DeepInfra as the provider using the model zai-org/GLM-5.2, and has price tracking enabled and consistent with the provider.  I normally do this through the Admin UI which goes into the LiteLLM DB, but I think you'd do it through either the API or an MCP around that API.  Even though DeepInfra is natively supported as an LiteLLM provider, we're adding it as a custom model because it's slow to upstream.  As suhc, pricing is VERY UNLIKELY auto-poulated from LiteLLM's cost database.
+
+Then I update my local `opencode` config at ~/.config/opencode/opencode.json to expose the new deepinfra/zai-org/GLM-5.2 model saying it's hosted on LiteLLM, with the same costs associated.
+
+I don't want to add every model, but I do want the ones enumerated between the local config and the LiteLLM config to be consistent.  And sometimes I want to add a new model like GLM-5.2 above.  Also, sometimes the new hosted provider is different. Like I recently started using DeepSeek so I'd get the info from https://api-docs.deepseek.com/quick_start/pricing.  For a while, I was using Anthropic so I'd get the info from https://platform.claude.com/docs/en/about-claude/pricing.
+
+Let's not worry about automation right now.  The end goal is to make an LLM skill that can do this work for me for specific models and I can prompt it to scan the sources and tell me what might need to be done, I'll review, and then I'll approve.  However, for now, let's just probe to see what we'd need to define or configure.  It'd be convenient if the skill pulled the pricing data from the provider's website (or API?) but if that's difficult, I'm happy to provide it when needed.
+
+For now, I've preconfigured LiteLLM MCP and we should assume it exists and assert it's available.
+
+Examples of issues we could address:
+* Stale pricing (cloud providers updated their per-token prices, but we are still using old prices)
+* Missing models in opencode (but exists in LiteLLM)
+* Missing costs (either in opencode or LiteLLM)
