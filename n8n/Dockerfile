@@ -9,8 +9,15 @@ ENV NODE_FUNCTION_ALLOW_EXTERNAL=moment,lodash,instagram-private-api,jsdom,md5
 
 # https://stackoverflow.com/questions/62554991/how-do-i-install-python-on-alpine-linux
 RUN echo "Installing python3"
-RUN apk_name=$(wget https://dl-cdn.alpinelinux.org/alpine/v3.23/main/$(uname -m)/ -O - | grep apk-tools-static | cut -d '"' -f2) && wget https://dl-cdn.alpinelinux.org/alpine/v3.23/main/$(uname -m)/$apk_name && tar -xzf $apk_name -C /
-RUN /sbin/apk.static add apk-tools
+RUN . /etc/os-release && \
+    alpine_ver=$(echo "$VERSION_ID" | cut -d'.' -f1,2) && \
+    echo "Detected Alpine v${alpine_ver}" && \
+    apk_name=$(wget -q "https://dl-cdn.alpinelinux.org/alpine/v${alpine_ver}/main/$(uname -m)/" -O - | \
+               grep apk-tools-static | cut -d '"' -f2) && \
+    wget -q "https://dl-cdn.alpinelinux.org/alpine/v${alpine_ver}/main/$(uname -m)/$apk_name" && \
+    tar -xzf $apk_name -C / && \
+    rm $apk_name
+RUN /sbin/apk.static add --upgrade apk-tools libapk2
 RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
 
 RUN echo "Installing ffmpeg (for yt-dlp)"
@@ -31,4 +38,3 @@ RUN pip install --upgrade pip
 
 RUN echo "Installing yt-dlp"
 RUN pip install "yt-dlp[default]"
-
