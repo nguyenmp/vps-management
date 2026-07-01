@@ -426,6 +426,7 @@ services:
       - STORE_MODEL_IN_DB=true
       - LITELLM_MASTER_KEY=${LITELLM_ADMIN_PASSWORD:?error}
       - DATABASE_URL=postgresql://litellm_login:${LITELLM_POSTGRES_PASSWORD:?error}@postgres-recipes:5432/litellm_db
+      - PROXY_BASE_URL=https://litellm.href.cat
     depends_on:
       postgres-recipes:
         condition: service_healthy
