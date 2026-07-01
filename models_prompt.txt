@@ -16,3 +16,8 @@ Examples of issues we could address:
 * Stale pricing (cloud providers updated their per-token prices, but we are still using old prices)
 * Missing models in opencode (but exists in LiteLLM)
 * Missing costs (either in opencode or LiteLLM)
+
+Gotcha: LiteLLM custom models need pricing in BOTH `litellm_params`
+AND `model_info` for cost tracking to work. If pricing is only in
+`model_info`, spend logs will show $0.00 despite the model working
+fine.
