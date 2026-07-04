@@ -403,9 +403,6 @@ services:
       - TZ="America/Los_Angeles"
   open-webui:
     image: ghcr.io/open-webui/open-webui:main-slim
-    environment:
-      - CHAT_RESPONSE_STREAM_DELTA_CHUNK_SIZE=15
-      - GLOBAL_LOG_LEVEL=DEBUG
     volumes:
       - ./open-webui-data/:/app/backend/data
     restart: unless-stopped
