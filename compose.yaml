@@ -403,6 +403,8 @@ services:
       - TZ="America/Los_Angeles"
   open-webui:
     image: ghcr.io/open-webui/open-webui:main-slim
+    environment:
+      - ENV=dev
     volumes:
       - ./open-webui-data/:/app/backend/data
     restart: unless-stopped
