@@ -47,6 +47,8 @@ systemctl restart docker containerd
 docker run hello-world # should create in the mount/docker/containers
 ```
 * Backup snapshots via n8n via API
+* When changing hosts, you should update inventory.ini with the new host IP
+* You should also update the hostname under `GCLOUD_FM_COLLECTOR_ID` in `envs/production.env` to support alloy (grafana) and redeploy alloy
 
 Domains:
 * archivebox.href.cat
