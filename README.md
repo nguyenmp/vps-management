@@ -24,10 +24,29 @@ ssh -i ~/.ssh/id_ed25519.digital_ocean root@147.182.236.144
 
 Anything weird I might need to know:
 
-* Ubuntu 22
+* Ubuntu 26
 * 2 GB RAM minimum to run archivebox, otherwise pick the smallest one you can get.
-* 4 GB SWAP cause archivebox launches like 10 chrome instances at once (https://itsfoss.com/swap-size/) and 2x RAM seems reasonable at low RAM usages. `sudo fallocate -l 4G /swapfile && ` (https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-20-04)
-* 1 Volumes Block Storage (`/mnt/volume_sfo3_01/`) for hikariita
+* 2 GB buffer file `fallocate -l 2G ~/buffer_file.2G.txt` to delete if we run out of disk space
+* 8 GB SWAP cause archivebox launches like 10 chrome instances at once (https://itsfoss.com/swap-size/). `sudo fallocate -l 8G /swapfile && ` (https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-20-04)
+* Transfer to new host using `rsync -avz --partial --delete --progress root@vps.href.cat:~/vps-management/ ~/vps-management/`
+* Install docker-ce https://community.hetzner.com/tutorials/howto-docker-install#step-1---installing-docker-engine
+* 1 Volumes Block Storage (`/mnt/HC_Volume_106261021/`) for docker images so that they don't take up unnecessary backup space. https://stackoverflow.com/questions/24309526/how-to-change-the-docker-image-installation-directory
+```
+cat /etc/docker/daemon.json 
+{
+  "data-root": "/mnt/HC_Volume_106261021/docker"
+}
+
+# Also update containerd https://docs.docker.com/engine/storage/containerd/
+# https://docs.docker.com/engine/daemon/#configure-the-data-directory-location
+cat /etc/containerd/config.toml
+root = "/mnt/HC_Volume_106261021/containerd"
+
+systemctl daemon-reload
+systemctl restart docker containerd
+docker run hello-world # should create in the mount/docker/containers
+```
+* Backup snapshots via n8n via API
 
 Domains:
 * archivebox.href.cat
