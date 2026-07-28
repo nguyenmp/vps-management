@@ -503,5 +503,21 @@ services:
       - ./vikunja-data/files:/app/vikunja/files
       - ./vikunja-data/db:/db
     restart: unless-stopped
+
+  sparkling-axolotl-jump:
+    build: https://github.com/nguyenmp/sparkling-axolotl-jump.git
+    environment:
+      - DATABASE_URL=${RECIPES_DATABASE_URL:?error}
+      - NITRO_AUTH_PASSWORD=${RECIPES_PASSWORD:?error}
+    expose:
+      - 8080
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "http://127.0.0.1:8080/", "-O", "/dev/null"]
+      interval: 73s
+      timeout: 5s
+      start_period: 30s
+      start_interval: 5s
+      retries: 5
 volumes:
   changedetection-data:

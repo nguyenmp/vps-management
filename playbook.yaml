@@ -81,6 +81,18 @@
         remove_orphans: true
         wait: true
 
+    - name: docker compose up --build sparkling-axolotl-jump
+      community.docker.docker_compose_v2:
+        env_files:
+          - ./envs/production.env
+        project_src: ./vps-management/
+        pull: always
+        build: always
+        services:
+          - sparkling-axolotl-jump
+        remove_orphans: true
+        wait: true
+
     - name: docker compose up (everything else)
       community.docker.docker_compose_v2:
         env_files:

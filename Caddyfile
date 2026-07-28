@@ -70,3 +70,7 @@ syncthing.href.cat {
 vikunja.href.cat {
     reverse_proxy vikunja:3456
 }
+
+recipes.apps.href.cat, recipes.apps.docker.localhost {
+    reverse_proxy sparkling-axolotl-jump:8080
+}
