@@ -154,6 +154,8 @@ services:
     platform: linux/amd64
   postgres-recipes:
     image: pgvector/pgvector:pg${POSTGRES_VERSION:?error}
+    ports:
+      - 5432:5432
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?error}
     volumes:
