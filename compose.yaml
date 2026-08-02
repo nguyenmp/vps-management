@@ -39,8 +39,10 @@ services:
     environment:
       - SERVE_ADDR=0.0.0.0:8080
       - LOG_LEVEL=info
+      - YT_DLP_COOKIES=/data/cookies.txt
     volumes:
       - ./simplearchive-data:/data
+      - ./envs/cookies.simplearchive.firefox-private.ig.youtube.txt:/data/cookies.txt:ro
     expose:
       - 8080
     platform: linux/amd64
