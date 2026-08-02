@@ -44,18 +44,6 @@
         cmd: docker compose --env-file ./envs/production.env pull
         chdir: ./vps-management/
 
-    - name: docker compose up --build archivebox
-      community.docker.docker_compose_v2:
-        env_files:
-          - ./envs/production.env
-        project_src: ./vps-management/
-        pull: always
-        build: always
-        services:
-          - archivebox
-        remove_orphans: true
-        wait: true
-
     - name: docker compose up --build hikariita
       community.docker.docker_compose_v2:
         env_files:

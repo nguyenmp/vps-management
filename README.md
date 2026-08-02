@@ -25,9 +25,9 @@ ssh -i ~/.ssh/id_ed25519.digital_ocean root@147.182.236.144
 Anything weird I might need to know:
 
 * Ubuntu 26
-* 2 GB RAM minimum to run archivebox, otherwise pick the smallest one you can get.
+* 2 GB RAM minimum, otherwise pick the smallest one you can get.
 * 2 GB buffer file `fallocate -l 2G ~/buffer_file.2G.txt` to delete if we run out of disk space
-* 8 GB SWAP cause archivebox launches like 10 chrome instances at once (https://itsfoss.com/swap-size/). `sudo fallocate -l 8G /swapfile && ` (https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-20-04)
+* 8 GB SWAP (https://itsfoss.com/swap-size/). `sudo fallocate -l 8G /swapfile && ` (https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-20-04)
 * Transfer to new host using `rsync -avz --partial --delete --progress root@vps.href.cat:~/vps-management/ ~/vps-management/`
 * Install docker-ce https://community.hetzner.com/tutorials/howto-docker-install#step-1---installing-docker-engine
 * 1 Volumes Block Storage (`/mnt/HC_Volume_106261021/`) for docker images so that they don't take up unnecessary backup space. https://stackoverflow.com/questions/24309526/how-to-change-the-docker-image-installation-directory
@@ -51,7 +51,6 @@ docker run hello-world # should create in the mount/docker/containers
 * You should also update the hostname under `GCLOUD_FM_COLLECTOR_ID` in `envs/production.env` to support alloy (grafana) and redeploy alloy
 
 Domains:
-* archivebox.href.cat
 * changes.href.cat
 * hikariita.href.cat
 
@@ -92,28 +91,6 @@ ansible-playbook -i inventory.ini playbook.yaml --key-file ~/.ssh/id_ed25519.dig
 
 Set up specific services if first run (via SSH on remote machine):
 
-```bash
-docker compose --env-file ./envs/local.env run archivebox manage createsuperuser
-docker compose --env-file ./envs/local.env run archivebox config --set USE_CHROME=false
-docker compose --env-file ./envs/local.env run archivebox config --set SAVE_WGET=false
-docker compose --env-file ./envs/local.env run archivebox config --set SAVE_WARC=false
-docker compose --env-file ./envs/local.env run archivebox config --set SAVE_PDF=false
-docker compose --env-file ./envs/local.env run archivebox config --set SAVE_SCREENSHOT=false
-docker compose --env-file ./envs/local.env run archivebox config --set SAVE_SINGLEFILE=false
-docker compose --env-file ./envs/local.env run archivebox config --set SAVE_GIT=false
-# Keep DOM enabled, even though it uses chrome.  One chrome at a time seems fine, not great but it gets past some paywalls.  Also the size is pretty minimal compared to WARC or singlefile which saves all the assets (images) too.
-# docker compose --env-file ./envs/local.env run archivebox config --set SAVE_DOM=false
-
-# Follow the following url to create a cookies.txt file
-https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies
-# I used the following Firefox extension:
-https://addons.mozilla.org/en-US/firefox/addon/cookies-txt/
-"YT_DLP_COOKIES_FILE=./envs/cookies.txt" >> local.env
-
-# Pick up the new config changes and verify via the admin panel
-docker compose --env-file ./envs/local.env restart archivebox
-```
-
 Add password to changes.href.cat (under Settings in web UI)
 
 Set poll interval to 1 minute (instead of 3 hours)
@@ -140,7 +117,6 @@ docker compose --env-file ./envs/local.env down && docker compose --env-file ./e
 
 Visit http://hikariita.docker.localhost/ for hikariita
 Visit http://changes.docker.localhost/ for changedetector.io
-Visit http://archivebox.docker.localhost/ for archivebox
 
 Visit http://localhost:8080/dashboard/#/ for traefik dashboard
 
@@ -151,36 +127,6 @@ Finish with the configuration from "How To Use".
 ```
 ssh -i ~/.ssh/id_ed25519.digital_ocean root@147.182.236.144
 docker container logs hikariita
-```
-
-## To rebuild a specific container image (like if you're updating local ArchiveBox)
-
-Based on https://docs.archivebox.io/dev/README.html#setup-the-dev-environment
-
-Rebase onto latest released version: https://hub.docker.com/r/archivebox/archivebox/tags
-
-```
-cd ArchiveBox
-git submodule update --init --recursive
-# git pull --recurse-submodules
-docker build --platform linux/amd64 -t markerz/archivebox:latest -t markerz/archivebox:v0.8.5rc51 .
-```
-
-If it builds, then commit and push.
-
-https://stackoverflow.com/questions/36884991/how-to-rebuild-docker-container-in-docker-compose-yml
-
-```
-docker compose --env-file ./envs/local.env up -d --wait
-docker image push markerz/archivebox:v0.8.5rc51
-docker image push markerz/archivebox:latest
-ansible ...
-```
-
-Note: Sometimes upgrading (or downgrading) will break chromium because the persona version is wrong.  In this case, just delete personal directory in the /data/ folder.  You'll find out when you run a chromium command and get:
-
-```
-The profile appears to be in use by another Chromium process (531) on another computer (f6a12c579e02). Chromium has locked the profile so that it doesn't get corrupted. If you are sure no other processes are using this profile, you can unlock the profile and relaunch Chromium
 ```
 
 ## Updating the server
@@ -225,7 +171,7 @@ docker image ls
 # Try updating!
 docker compose --env-file ./envs/local.env pull
 docker compose --env-file ./envs/local.env down  # Optional downtime to force restart all containers
-docker compose --env-file ./envs/local.env up -d --remove-orphans --wait --build hikariita archivebox # Needs to be rebuilt from source cause git doesn't automatically update
+docker compose --env-file ./envs/local.env up -d --remove-orphans --wait --build hikariita # Needs to be rebuilt from source cause git doesn't automatically update
 docker compose --env-file ./envs/local.env up -d --wait
 
 # Clean up

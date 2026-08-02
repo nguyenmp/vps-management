@@ -34,10 +34,6 @@ origin.changes.href.cat, changes.docker.localhost {
     reverse_proxy changedetection:5000
 }
 
-origin.archivebox.href.cat, archivebox.docker.localhost, archivebox.href.cat {
-    reverse_proxy archivebox:8000
-}
-
 origin.recipes.href.cat, recipes.docker.localhost {
     reverse_proxy recipes:3000
 }
