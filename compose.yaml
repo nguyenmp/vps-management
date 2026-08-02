@@ -42,7 +42,7 @@ services:
       - YT_DLP_COOKIES=/data/cookies.txt
     volumes:
       - ./simplearchive-data:/data
-      - ./envs/cookies.simplearchive.firefox-private.ig.youtube.txt:/data/cookies.txt:ro
+      - ./envs/cookies.simplearchive.firefox-private.ig.youtube.txt:/data/cookies.txt
     expose:
       - 8080
     platform: linux/amd64
