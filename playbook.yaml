@@ -1,15 +1,14 @@
 ---
-- name: My first play
+- name: Deploy VPS services
   hosts: myhosts
   tasks:
-    # Sanity test to connect to host
     - name: Ping my hosts
       ansible.builtin.ping: null
+
     - name: Print message
       ansible.builtin.debug:
         msg: Hello world
 
-    # Drop the README.md on the host so that I know how to manage it in 10 years
     - name: Add this repository (minus .git) and the rest of this project
       ansible.posix.synchronize:
         src: ./
@@ -19,22 +18,20 @@
         rsync_opts:
           - "--exclude=.git"
           - "--exclude=*-data/"
-          # We allow www just cause it's easier that way
 
-    # Set up system packages
     - name: Install aptitude the preferred manager
       ansible.builtin.apt:
         name: aptitude
         state: latest
         update_cache: true
+
     - name: Upgrade system packages
       ansible.builtin.apt:
         upgrade: true
         update_cache: true
 
-    # Set up docker
     - name: Update apt and install docker-ce
-      apt:
+      ansible.builtin.apt:
         name: docker-ce
         state: latest
         update_cache: true
