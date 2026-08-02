@@ -16,6 +16,16 @@ origin.hikariita.href.cat, hikariita.docker.localhost {
     reverse_proxy hikariita:80
 }
 
+simplearchive.href.cat, simplearchive.docker.localhost {
+    @notGetHead {
+        not method GET HEAD
+    }
+    basic_auth @notGetHead {
+        admin {$SIMPLEARCHIVE_PASSWORD_HASH}
+    }
+    reverse_proxy simplearchive:8080
+}
+
 origin.static.href.cat, static.docker.localhost {
     reverse_proxy nginx:80
 }

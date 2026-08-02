@@ -4,6 +4,7 @@ services:
     image: caddy:latest
     environment:
       - MARIMO_PASSWORD_HASH=${MARIMO_PASSWORD_HASH:?error}
+      - SIMPLEARCHIVE_PASSWORD_HASH=${SIMPLEARCHIVE_PASSWORD_HASH:?error}
     ports:
       - "80:80"
       - "443:443"
@@ -27,6 +28,26 @@ services:
     healthcheck:
       test: ["CMD", "curl", "http://localhost:80/"]
       interval: 61s
+      timeout: 5s
+      start_period: 30s
+      start_interval: 5s
+      retries: 5
+  simplearchive:
+    build:
+      context: https://github.com/nguyenmp/simplearchive.git
+      target: runtime
+    environment:
+      - SERVE_ADDR=0.0.0.0:8080
+      - LOG_LEVEL=info
+    volumes:
+      - ./simplearchive-data:/data
+    expose:
+      - 8080
+    platform: linux/amd64
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:8080/healthz"]
+      interval: 60s
       timeout: 5s
       start_period: 30s
       start_interval: 5s
