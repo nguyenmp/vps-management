@@ -44,76 +44,75 @@
         cmd: docker compose --env-file ./envs/production.env pull
         chdir: ./vps-management/
 
-    - name: docker compose up --build hikariita
+    - name: docker compose build
+      ansible.builtin.shell:
+        cmd: docker compose --env-file ./envs/production.env build
+        chdir: ./vps-management/
+
+    - name: docker compose up hikariita
       community.docker.docker_compose_v2:
         env_files:
           - ./envs/production.env
         project_src: ./vps-management/
         pull: always
-        build: always
         services:
           - hikariita
         remove_orphans: true
         wait: true
 
-    - name: docker compose up --build postgres-recipes redis
+    - name: docker compose up postgres-recipes redis
       community.docker.docker_compose_v2:
         env_files:
           - ./envs/production.env
         project_src: ./vps-management/
         pull: always
-        build: always
         services:
           - postgres-recipes
           - redis
         remove_orphans: true
         wait: true
 
-    - name: docker compose up --build tor-socks-proxy sockpuppetbrowser
+    - name: docker compose up tor-socks-proxy sockpuppetbrowser
       community.docker.docker_compose_v2:
         env_files:
           - ./envs/production.env
         project_src: ./vps-management/
         pull: always
-        build: always
         services:
           - tor-socks-proxy
           - sockpuppetbrowser
         remove_orphans: true
         wait: true
 
-    - name: docker compose up --build n8n n8n-worker
+    - name: docker compose up n8n n8n-worker
       community.docker.docker_compose_v2:
         env_files:
           - ./envs/production.env
         project_src: ./vps-management/
         pull: always
-        build: always
         services:
           - n8n
           - n8n-worker
         remove_orphans: true
         wait: true
 
-    - name: docker compose up --build sparkling-axolotl-jump
+    - name: docker compose up sparkling-axolotl-jump
       community.docker.docker_compose_v2:
         env_files:
           - ./envs/production.env
         project_src: ./vps-management/
         pull: always
-        build: always
         services:
           - sparkling-axolotl-jump
         remove_orphans: true
         wait: true
 
-    - name: docker compose up --build simplearchive
+    - name: docker compose up simplearchive
       community.docker.docker_compose_v2:
         env_files:
           - ./envs/production.env
         project_src: ./vps-management/
         pull: always
-        build: always
         services:
           - simplearchive
         remove_orphans: true
