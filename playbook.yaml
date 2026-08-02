@@ -48,75 +48,39 @@
         chdir: ./vps-management/
 
     - name: docker compose up hikariita
-      community.docker.docker_compose_v2:
-        env_files:
-          - ./envs/production.env
-        project_src: ./vps-management/
-        services:
-          - hikariita
-        remove_orphans: true
-        wait: true
+      ansible.builtin.shell:
+        cmd: docker compose --env-file ./envs/production.env up -d --wait --remove-orphans hikariita
+        chdir: ./vps-management/
 
     - name: docker compose up postgres-recipes redis
-      community.docker.docker_compose_v2:
-        env_files:
-          - ./envs/production.env
-        project_src: ./vps-management/
-        services:
-          - postgres-recipes
-          - redis
-        remove_orphans: true
-        wait: true
+      ansible.builtin.shell:
+        cmd: docker compose --env-file ./envs/production.env up -d --wait --remove-orphans postgres-recipes redis
+        chdir: ./vps-management/
 
     - name: docker compose up tor-socks-proxy sockpuppetbrowser
-      community.docker.docker_compose_v2:
-        env_files:
-          - ./envs/production.env
-        project_src: ./vps-management/
-        services:
-          - tor-socks-proxy
-          - sockpuppetbrowser
-        remove_orphans: true
-        wait: true
+      ansible.builtin.shell:
+        cmd: docker compose --env-file ./envs/production.env up -d --wait --remove-orphans tor-socks-proxy sockpuppetbrowser
+        chdir: ./vps-management/
 
     - name: docker compose up n8n n8n-worker
-      community.docker.docker_compose_v2:
-        env_files:
-          - ./envs/production.env
-        project_src: ./vps-management/
-        services:
-          - n8n
-          - n8n-worker
-        remove_orphans: true
-        wait: true
+      ansible.builtin.shell:
+        cmd: docker compose --env-file ./envs/production.env up -d --wait --remove-orphans n8n n8n-worker
+        chdir: ./vps-management/
 
     - name: docker compose up sparkling-axolotl-jump
-      community.docker.docker_compose_v2:
-        env_files:
-          - ./envs/production.env
-        project_src: ./vps-management/
-        services:
-          - sparkling-axolotl-jump
-        remove_orphans: true
-        wait: true
+      ansible.builtin.shell:
+        cmd: docker compose --env-file ./envs/production.env up -d --wait --remove-orphans sparkling-axolotl-jump
+        chdir: ./vps-management/
 
     - name: docker compose up simplearchive
-      community.docker.docker_compose_v2:
-        env_files:
-          - ./envs/production.env
-        project_src: ./vps-management/
-        services:
-          - simplearchive
-        remove_orphans: true
-        wait: true
+      ansible.builtin.shell:
+        cmd: docker compose --env-file ./envs/production.env up -d --wait --remove-orphans simplearchive
+        chdir: ./vps-management/
 
     - name: docker compose up (everything else)
-      community.docker.docker_compose_v2:
-        env_files:
-          - ./envs/production.env
-        project_src: ./vps-management/
-        remove_orphans: true
-        wait: true
+      ansible.builtin.shell:
+        cmd: docker compose --env-file ./envs/production.env up -d --wait --remove-orphans
+        chdir: ./vps-management/
 
     - name: Prune stopped containers and unused networks
       community.docker.docker_prune:
