@@ -37,9 +37,10 @@
         update_cache: true
 
     - name: docker compose pull
-      ansible.builtin.shell:
-        cmd: docker compose --env-file ./envs/production.env pull
-        chdir: ./vps-management/
+      community.docker.docker_compose_v2_pull:
+        env_files:
+          - ./envs/production.env
+        project_src: ./vps-management/
 
     - name: docker compose build
       ansible.builtin.shell:
