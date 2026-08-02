@@ -127,10 +127,15 @@
         remove_orphans: true
         wait: true
 
-    - name: Prune everything
+    - name: Prune stopped containers and unused networks
       community.docker.docker_prune:
         containers: true
-        images: true
         networks: true
-        volumes: true
-        builder_cache: true
+
+    - name: Prune unused images
+      ansible.builtin.shell:
+        cmd: docker image prune -a --force
+
+    - name: Prune dangling builder cache
+      ansible.builtin.shell:
+        cmd: docker builder prune --filter "dangling=true" --force
