@@ -191,7 +191,9 @@ services:
       retries: 5
 
   n8n:
-    build: n8n/.
+    build:
+      context: https://github.com/nguyenmp/vps-management.git
+      dockerfile: n8n/Dockerfile
     environment:
       - N8N_RUNNERS_ENABLED=true
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
@@ -252,7 +254,9 @@ services:
   n8n-worker:
     # docker run --name n8n-queue -p 5679:5678 docker.n8n.io/n8nio/n8n worker
     command: worker
-    build: n8n/.
+    build:
+      context: https://github.com/nguyenmp/vps-management.git
+      dockerfile: n8n/Dockerfile
     environment:
       - N8N_RUNNERS_ENABLED=true
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
