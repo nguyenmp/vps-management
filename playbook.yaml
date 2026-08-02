@@ -27,10 +27,10 @@
         name: aptitude
         state: latest
         update_cache: true
-    # - name: Upgrade system packages
-    #   ansible.builtin.apt:
-    #     upgrade: yes
-    #     update_cache: true
+    - name: Upgrade system packages
+      ansible.builtin.apt:
+        upgrade: true
+        update_cache: true
 
     # Set up docker
     - name: Update apt and install docker-ce
