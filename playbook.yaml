@@ -56,6 +56,32 @@
         remove_orphans: true
         wait: true
 
+    - name: docker compose up --build postgres-recipes redis
+      community.docker.docker_compose_v2:
+        env_files:
+          - ./envs/production.env
+        project_src: ./vps-management/
+        pull: always
+        build: always
+        services:
+          - postgres-recipes
+          - redis
+        remove_orphans: true
+        wait: true
+
+    - name: docker compose up --build tor-socks-proxy sockpuppetbrowser
+      community.docker.docker_compose_v2:
+        env_files:
+          - ./envs/production.env
+        project_src: ./vps-management/
+        pull: always
+        build: always
+        services:
+          - tor-socks-proxy
+          - sockpuppetbrowser
+        remove_orphans: true
+        wait: true
+
     - name: docker compose up --build n8n n8n-worker
       community.docker.docker_compose_v2:
         env_files:
