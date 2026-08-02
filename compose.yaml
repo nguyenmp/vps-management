@@ -41,6 +41,9 @@ services:
       - LOG_LEVEL=info
       - YT_DLP_COOKIES=/data/cookies.txt
       - SOCKS5_PROXY=socks5://tor-socks-proxy:9150
+      # Remote Chrome over CDP (no chromium in the image); a fresh Chrome per
+      # connection. The proxy variant passes --proxy-server via the ws query.
+      - CHROME_CDP_URL=ws://sockpuppetbrowser:3000
     volumes:
       - ./simplearchive-data:/data
       - ./envs/cookies.simplearchive.firefox-private.ig.youtube.txt:/data/cookies.txt
@@ -50,6 +53,8 @@ services:
     restart: unless-stopped
     depends_on:
       tor-socks-proxy:
+        condition: service_started
+      sockpuppetbrowser:
         condition: service_started
     healthcheck:
       test: ["CMD", "curl", "http://localhost:8080/healthz"]
