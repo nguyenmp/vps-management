@@ -85,6 +85,7 @@ services:
       # Alternative target "Chrome" Playwright URL, do not use "'s or 's!
       # "Playwright" is a driver/librarythat allows changedetection to talk to a Chrome or similar browser.
       - PLAYWRIGHT_DRIVER_URL=ws://sockpuppetbrowser:3000
+      - FETCH_WORKERS=2
     volumes:
       - ./changedetection-data/:/datastore/
     restart: unless-stopped
