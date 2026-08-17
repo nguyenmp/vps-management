@@ -391,6 +391,10 @@ services:
     image: ghcr.io/open-webui/open-webui:main-slim
     environment:
       - ENV=dev
+      - RAG_EMBEDDING_ENGINE=openai
+      - DATABASE_POOL_SIZE=8
+      - DATABASE_SQLITE_PRAGMA_CACHE_SIZE=-2000
+      - DATABASE_SQLITE_PRAGMA_MMAP_SIZE=0
     volumes:
       - ./open-webui-data/:/app/backend/data
     restart: unless-stopped
