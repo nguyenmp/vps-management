@@ -418,6 +418,7 @@ services:
       - DATABASE_URL=postgresql://litellm_login:${LITELLM_POSTGRES_PASSWORD:?error}@postgres-recipes:5432/litellm_db
       - PROXY_BASE_URL=https://litellm.href.cat
       - LITELLM_DISABLE_NO_REDIS_WARNING=true
+      - NUM_WORKERS=2
     depends_on:
       postgres-recipes:
         condition: service_healthy
