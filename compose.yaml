@@ -5,6 +5,7 @@ services:
     environment:
       - MARIMO_PASSWORD_HASH=${MARIMO_PASSWORD_HASH:?error}
       - SIMPLEARCHIVE_PASSWORD_HASH=${SIMPLEARCHIVE_PASSWORD_HASH:?error}
+      - PORTER_PASSWORD_HASH=${PORTER_PASSWORD_HASH:?error}
     ports:
       - "80:80"
       - "443:443"
@@ -504,6 +505,28 @@ services:
     healthcheck:
       test: ["CMD", "wget", "http://127.0.0.1:8080/", "-O", "/dev/null"]
       interval: 73s
+      timeout: 5s
+      start_period: 30s
+      start_interval: 5s
+      retries: 5
+  porter:
+    build: https://github.com/nguyenmp/porter.git
+    working_dir: /data          # porter.db + porter.mcp.json load from CWD (hardcoded paths)
+    command: server             # image entrypoint has no default subcommand
+    environment:
+      - PORTER_ADDR=0.0.0.0:8787
+      - PORTER_BASE_URL=${PORTER_BASE_URL:-http://litellm:4000/v1}
+      - PORTER_MODEL=${PORTER_MODEL:?error}
+      - PORTER_API_KEY=${PORTER_API_KEY:?error}
+    volumes:
+      - ./porter-data:/data                                   # persists porter.db (SQLite WAL)
+      - ./porter.mcp.json:/data/porter.mcp.json:ro           # MCP creds; gitignored, mounted in
+    expose:
+      - 8787
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "http://127.0.0.1:8787/api/sessions", "-O", "/dev/null"]
+      interval: 60s
       timeout: 5s
       start_period: 30s
       start_interval: 5s

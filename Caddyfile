@@ -80,3 +80,13 @@ vikunja.href.cat {
 recipes.apps.href.cat, recipes.apps.docker.localhost {
     reverse_proxy sparkling-axolotl-jump:8080
 }
+porter.href.cat, porter.docker.localhost {
+    # Basic auth protects both the web UI and the API. The browser caches the
+    # credentials and reuses them for the same-origin SSE stream automatically.
+    basic_auth {
+        admin {$PORTER_PASSWORD_HASH}
+    }
+    reverse_proxy porter:8787 {
+        flush_interval -1   # required — the chat UI streams via htmx-SSE
+    }
+}

@@ -77,6 +77,11 @@
         cmd: docker compose --env-file ./envs/production.env up -d --wait --remove-orphans simplearchive
         chdir: ./vps-management/
 
+    - name: docker compose up porter
+      ansible.builtin.shell:
+        cmd: docker compose --env-file ./envs/production.env up -d --wait --remove-orphans porter
+        chdir: ./vps-management/
+
     - name: docker compose up (everything else)
       ansible.builtin.shell:
         cmd: docker compose --env-file ./envs/production.env up -d --wait --remove-orphans
