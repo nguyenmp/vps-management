@@ -373,7 +373,7 @@ services:
   portainer:
     image: portainer/portainer-ce:lts
     environment:
-      - TRUSTED_ORIGINS=origin.portainer.href.cat,portainer.href.cat,portainer.docker.localhost
+      - TRUSTED_ORIGINS=https://origin.portainer.href.cat,https://portainer.href.cat,http://portainer.docker.localhost
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
