@@ -56,10 +56,6 @@ origin.audiobookshelf.href.cat, audiobookshelf.docker.localhost {
     reverse_proxy audiobookshelf:80
 }
 
-origin.openwebui.href.cat, openwebui.docker.localhost {
-    reverse_proxy open-webui:8080
-}
-
 litellm.href.cat, litellm.docker.localhost {
     reverse_proxy litellm:4000
 }
