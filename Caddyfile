@@ -5,10 +5,12 @@
 # Redirects
 origin.href.cat, docker.localhost {
     redir https://aggressivelyparaphrasing.me{uri} temporary
+    header Cache-Control no-store
 }
 
 origin.status.href.cat, status.docker.localhost {
     redir https://stats.uptimerobot.com/ZM36nymMTx{uri} temporary
+    header Cache-Control no-store
 }
 
 # Services
