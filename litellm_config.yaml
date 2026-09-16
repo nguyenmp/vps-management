@@ -1,2 +1,3 @@
 general_settings:
   always_include_stream_usage: true
+  database_connection_pool_limit: 10

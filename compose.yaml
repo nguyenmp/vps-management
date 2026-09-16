@@ -391,7 +391,9 @@ services:
       - TZ="America/Los_Angeles"
 
   litellm:
-    image: docker.litellm.ai/berriai/litellm:main-latest
+    build:
+      context: ./litellm
+      dockerfile: Dockerfile
     volumes:
       - ./litellm_config.yaml:/app/config.yaml
     environment:
