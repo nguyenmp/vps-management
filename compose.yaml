@@ -498,6 +498,7 @@ services:
       - PORTER_ADDR=0.0.0.0:8787
       - PORTER_BASE_URL=${PORTER_BASE_URL:-http://litellm:4000/v1}
       - PORTER_MODEL=${PORTER_MODEL:?error}
+      - PORTER_IMAGE_MODEL=${PORTER_IMAGE_MODEL:?error}
       - PORTER_API_KEY=${PORTER_API_KEY:?error}
     volumes:
       - ./porter-data:/data                                   # persists porter.db (SQLite WAL)
