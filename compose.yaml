@@ -513,5 +513,20 @@ services:
       start_period: 30s
       start_interval: 5s
       retries: 5
+  bifrost:
+    image: maximhq/bifrost:v2.3.2
+    environment:
+      - APP_PORT=8080
+      - BIFROST_SETUP_TOKEN=${BIFROST_SETUP_TOKEN:?error}
+    volumes:
+      - ./bifrost-data/:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/health"]
+      interval: 74s
+      timeout: 5s
+      start_period: 30s
+      start_interval: 5s
+      retries: 5
 volumes:
   changedetection-data:

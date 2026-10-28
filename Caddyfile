@@ -60,6 +60,10 @@ litellm.href.cat, litellm.docker.localhost {
     reverse_proxy litellm:4000
 }
 
+bifrost.href.cat, bifrost.docker.localhost {
+    reverse_proxy bifrost:8080
+}
+
 origin.marimo.href.cat, marimo.docker.localhost {
     basic_auth {
         admin {$MARIMO_PASSWORD_HASH}
