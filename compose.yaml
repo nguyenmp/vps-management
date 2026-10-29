@@ -498,6 +498,10 @@ services:
       - PORTER_ADDR=0.0.0.0:8787
       - PORTER_BASE_URL=${PORTER_BASE_URL:-http://litellm:4000/v1}
       - PORTER_MODEL=${PORTER_MODEL:?error}
+      # The endpoint pin. Without this line the value in the env file never
+      # reaches the container, and every request takes the gateway's own
+      # routing instead.
+      - PORTER_PROVIDER=${PORTER_PROVIDER:-}
       - PORTER_IMAGE_MODEL=${PORTER_IMAGE_MODEL:?error}
       - PORTER_API_KEY=${PORTER_API_KEY:?error}
     volumes:
