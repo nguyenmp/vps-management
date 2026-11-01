@@ -475,6 +475,9 @@ services:
       - PORTER_PROVIDER=${PORTER_PROVIDER:-}
       - PORTER_IMAGE_MODEL=${PORTER_IMAGE_MODEL:?error}
       - PORTER_API_KEY=${PORTER_API_KEY:?error}
+    depends_on:
+      bifrost:
+        condition: service_healthy
     volumes:
       - ./porter-data:/data                                   # persists porter.db (SQLite WAL)
       - ./porter.mcp.json:/data/porter.mcp.json:ro           # MCP creds; gitignored, mounted in
