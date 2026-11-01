@@ -56,10 +56,6 @@ origin.audiobookshelf.href.cat, audiobookshelf.docker.localhost {
     reverse_proxy audiobookshelf:80
 }
 
-litellm.href.cat, litellm.docker.localhost {
-    reverse_proxy litellm:4000
-}
-
 bifrost.href.cat, bifrost.docker.localhost {
     reverse_proxy bifrost:8080
 }

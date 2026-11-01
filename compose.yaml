@@ -390,35 +390,6 @@ services:
     environment:
       - TZ="America/Los_Angeles"
 
-  litellm:
-    image: docker.litellm.ai/berriai/litellm:main-latest
-    volumes:
-      - ./litellm_config.yaml:/app/config.yaml
-    environment:
-      - STORE_MODEL_IN_DB=true
-      - LITELLM_MASTER_KEY=${LITELLM_ADMIN_PASSWORD:?error}
-      - DATABASE_URL=postgresql://litellm_login:${LITELLM_POSTGRES_PASSWORD:?error}@postgres-recipes:5432/litellm_db
-      - PROXY_BASE_URL=https://litellm.href.cat
-      - LITELLM_DISABLE_NO_REDIS_WARNING=true
-      - PROXY_CONFIG_RELOAD_INTERVAL_SECONDS=86400
-    depends_on:
-      postgres-recipes:
-        condition: service_healthy
-    restart: unless-stopped
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "python",
-          "-c",
-          "import requests ; requests.get('http://localhost:4000').raise_for_status()",
-        ]
-      interval: 66s
-      timeout: 5s
-      start_period: 30s
-      start_interval: 5s
-      retries: 5
-
   marimo:
     image: ghcr.io/marimo-team/marimo:latest
     volumes:
@@ -496,7 +467,7 @@ services:
     command: server             # image entrypoint has no default subcommand
     environment:
       - PORTER_ADDR=0.0.0.0:8787
-      - PORTER_BASE_URL=${PORTER_BASE_URL:-http://litellm:4000/v1}
+      - PORTER_BASE_URL=${PORTER_BASE_URL:?error}
       - PORTER_MODEL=${PORTER_MODEL:?error}
       # The endpoint pin. Without this line the value in the env file never
       # reaches the container, and every request takes the gateway's own
