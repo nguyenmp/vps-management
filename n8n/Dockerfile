@@ -27,16 +27,10 @@ RUN echo "Installing deno (for yt-dlp)"
 RUN curl -fsSL https://deno.land/install.sh | sh
 
 RUN echo "Installing aws-cli"
-# dhi.io serves docutils files that no longer match its own index, so apk
-# rejects them with "v2 package integrity error". Reported 2026-11-01 to the
-# Docker Community Forum, pending moderation, under the title:
-#   dhi.io serves an old py3.14-docutils, so apk add fails with "v2 package
-#   integrity error"
-# https://forums.docker.com/u/markerz/activity/pending
-# Until that mirror is fixed, drop it here and take the packages from the
-# official Alpine CDN. Cost: aws-cli 2.34.63-r0 instead of 2.35.15-r1.
-RUN sed -i '/dhi\.io/d' /etc/apk/repositories && \
-    apk add --update --no-cache aws-cli
+# apk resolves from dhi.io first. Its py3.14-docutils packages broke that with
+# "v2 package integrity error" until revision r3, which matches the index.
+# https://github.com/docker-hardened-images/catalog/issues/693
+RUN apk add --update --no-cache aws-cli
 
 USER node
 RUN echo "Creating venv for user (not root) so that I can pip install from n8n"
