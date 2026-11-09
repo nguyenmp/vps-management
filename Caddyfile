@@ -1,99 +1,99 @@
 {
-    email nguyenmp605@gmail.com
-    # By default Caddy cuts a request body after one minute of silence.
-    # porter sends a command's output as that body, so a command that
-    # printed nothing for a minute lost its result.
-    servers {
-        timeouts {
-            read_body_idle 10m
-            write_idle 10m
-        }
-    }
+	email nguyenmp605@gmail.com
+	# By default Caddy cuts a request body after one minute of silence.
+	# porter sends a command's output as that body, so a command that
+	# printed nothing for a minute lost its result.
+	servers {
+		timeouts {
+			read_body_idle 10m
+			write_idle 10m
+		}
+	}
 }
 
 # Redirects
 origin.href.cat, docker.localhost {
-    redir https://aggressivelyparaphrasing.me{uri} temporary
-    header Cache-Control no-store
+	redir https://aggressivelyparaphrasing.me{uri} temporary
+	header Cache-Control no-store
 }
 
 origin.status.href.cat, status.docker.localhost {
-    redir https://stats.uptimerobot.com/ZM36nymMTx{uri} temporary
-    header Cache-Control no-store
+	redir https://stats.uptimerobot.com/ZM36nymMTx{uri} temporary
+	header Cache-Control no-store
 }
 
 # Services
 origin.hikariita.href.cat, hikariita.docker.localhost {
-    reverse_proxy hikariita:80
+	reverse_proxy hikariita:80
 }
 
 simplearchive.href.cat, simplearchive.docker.localhost {
-    @notGetHead {
-        not method GET HEAD
-    }
-    basic_auth @notGetHead {
-        admin {$SIMPLEARCHIVE_PASSWORD_HASH}
-    }
-    reverse_proxy simplearchive:8080
+	@notGetHead {
+		not method GET HEAD
+	}
+	basic_auth @notGetHead {
+		admin {$SIMPLEARCHIVE_PASSWORD_HASH}
+	}
+	reverse_proxy simplearchive:8080
 }
 
 origin.static.href.cat, static.docker.localhost {
-    reverse_proxy nginx:80
+	reverse_proxy nginx:80
 }
 
 origin.changes.href.cat, changes.docker.localhost {
-    reverse_proxy changedetection:5000
+	reverse_proxy changedetection:5000
 }
 
 origin.recipes.href.cat, recipes.docker.localhost {
-    reverse_proxy recipes:3000
+	reverse_proxy recipes:3000
 }
 
 origin.lowcoder.href.cat, lowcoder.docker.localhost {
-    reverse_proxy lowcoder-all-in-one:3000
+	reverse_proxy lowcoder-all-in-one:3000
 }
 
 origin.n8n.href.cat, n8n.href.cat, n8n.docker.localhost {
-    reverse_proxy n8n:5678
+	reverse_proxy n8n:5678
 }
 
 origin.portainer.href.cat, portainer.docker.localhost {
-    reverse_proxy portainer:9000
+	reverse_proxy portainer:9000
 }
 
 origin.audiobookshelf.href.cat, audiobookshelf.docker.localhost {
-    reverse_proxy audiobookshelf:80
+	reverse_proxy audiobookshelf:80
 }
 
 bifrost.href.cat, bifrost.docker.localhost {
-    reverse_proxy bifrost:8080
+	reverse_proxy bifrost:8080
 }
 
 origin.marimo.href.cat, marimo.docker.localhost {
-    basic_auth {
-        admin {$MARIMO_PASSWORD_HASH}
-    }
-    reverse_proxy marimo:8080
+	basic_auth {
+		admin {$MARIMO_PASSWORD_HASH}
+	}
+	reverse_proxy marimo:8080
 }
 
 syncthing.href.cat {
-    reverse_proxy syncthing:8384
+	reverse_proxy syncthing:8384
 }
 
 vikunja.href.cat {
-    reverse_proxy vikunja:3456
+	reverse_proxy vikunja:3456
 }
 
 recipes.apps.href.cat, recipes.apps.docker.localhost {
-    reverse_proxy sparkling-axolotl-jump:8080
+	reverse_proxy sparkling-axolotl-jump:8080
 }
 porter.href.cat, porter.docker.localhost {
-    # Basic auth protects both the web UI and the API. The browser caches the
-    # credentials and reuses them for the same-origin SSE stream automatically.
-    basic_auth {
-        porter {$PORTER_PASSWORD_HASH}
-    }
-    reverse_proxy porter:8787 {
-        flush_interval -1   # required — the chat UI streams via htmx-SSE
-    }
+	# Basic auth protects both the web UI and the API. The browser caches the
+	# credentials and reuses them for the same-origin SSE stream automatically.
+	basic_auth {
+		porter {$PORTER_PASSWORD_HASH}
+	}
+	reverse_proxy porter:8787 {
+		flush_interval -1 # required — the chat UI streams via htmx-SSE
+	}
 }
