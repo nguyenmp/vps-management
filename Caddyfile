@@ -1,5 +1,14 @@
 {
     email nguyenmp605@gmail.com
+    # By default Caddy cuts a request body after one minute of silence.
+    # porter sends a command's output as that body, so a command that
+    # printed nothing for a minute lost its result.
+    servers {
+        timeouts {
+            read_body_idle 10m
+            write_idle 10m
+        }
+    }
 }
 
 # Redirects
