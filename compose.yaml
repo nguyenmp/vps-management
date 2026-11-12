@@ -434,7 +434,7 @@ services:
       retries: 3
 
   vikunja:
-    image: vikunja/vikunja:2.3.0
+    image: vikunja/vikunja:latest
     environment:
       VIKUNJA_SERVICE_PUBLICURL: https://vikunja.href.cat/
       VIKUNJA_SERVICE_SECRET: b3e1717c7222092a57d6052c8564f79217f4d1b47d81895d3dec7b5cd19a1356
@@ -492,7 +492,7 @@ services:
       start_interval: 5s
       retries: 5
   bifrost:
-    image: maximhq/bifrost:v2.3.2
+    image: maximhq/bifrost:latest
     environment:
       - APP_PORT=8080
       - BIFROST_SETUP_TOKEN=${BIFROST_SETUP_TOKEN:?error}
